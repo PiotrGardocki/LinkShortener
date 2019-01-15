@@ -3,7 +3,9 @@ class LinksDBInterface:
 
     def check_if_shortlink_is_in_db(self, shortlink): pass
 
-# methods for insertin links
+    def check_if_shortlink_has_password(self, shortlink): pass
+
+# methods for inserting links
     def save_longlink_and_generate_shortlink(self, longlink, password=''): pass
 
     def save_shortlink_and_longlink(self, shortlink, longlink, password=''): pass
