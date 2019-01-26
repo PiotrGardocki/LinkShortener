@@ -1,3 +1,8 @@
-from django.shortcuts import render
+from shortener.django_receive import DjangoRequestReceiver
 
-# Create your views here.
+from django.http import HttpResponse
+
+
+def index(request):
+    # return HttpResponse('Port: ' + request.META['SERVER_PORT'])
+    return DjangoRequestReceiver.handle_request(request)
