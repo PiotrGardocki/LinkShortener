@@ -22,6 +22,7 @@ Possible errors in all actions:
 ##### Translation from shortlink to longlink
 
 Request:
+
 | POST variable | variable value |
 | --- | --- |
 | action | 'translate' |
