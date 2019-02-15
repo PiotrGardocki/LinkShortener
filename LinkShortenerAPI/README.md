@@ -46,7 +46,7 @@ Request:
 | shortlink | '`%shortlink(without domain/IP part)%`' |
 
 Response:
-- Status()
+- Status(200, 'Request done')
 - Body('exists: `%0-shortlink does not exists, 1-shortlink exists%`; needsPassword: `%0-no password, 1-link is secured%`')
 ---
 ##### Creating shortlink(for anonymous users):
@@ -64,4 +64,88 @@ Response:
 - Body('shortlink: `%shortlink(provided or generated)%`')
 
 Possible errors:
-- Status(400, 'Shortlink(`%shortlink%`) already taken')
+- Status(400, 'Shortlink(`%shortlink%`) is already taken')
+---
+##### Creating user:
+Request:
+
+| POST variable | variable value |
+| --- | --- |
+| action | 'createUser' |
+| email | '`%user's email%`' |
+| password | '`%user's password%`' |
+
+Response:
+- Status(201, 'User succesfully created')
+
+Possible errors:
+- Status(400, 'Email(`%email%`) is already taken')
+---
+##### Deleting user:
+Request:
+
+| POST variable | variable value |
+| --- | --- |
+| action | 'deleteUser' |
+| email | '`%user's email%`' |
+| password | '`%user's password%`' |
+
+Response:
+- Status(200, 'User succesfully deleted')
+
+Possible errors:
+- Status(404, User not found')
+- Status(401, 'Incorrect password for user')
+---
+##### Changing user's password:
+Request:
+
+| POST variable | variable value |
+| --- | --- |
+| action | 'changeUserPassword' |
+| email | '`%user's email%`' |
+| oldPassword | '`%user's old password%`' |
+| newPassword | '`%user's new password%`' |
+
+Response:
+- Status(200, 'Password succesfully changed')
+
+Possible errors:
+- Status(404, User not found')
+- Status(401, 'Incorrect password for user')
+---
+##### Changing user's email:
+Request:
+
+| POST variable | variable value |
+| --- | --- |
+| action | 'changeUserEmail' |
+| oldEmail | '`%user's old email%`' |
+| newEmail | '`%user's new email%`' |
+| password | '`%user's password%`' |
+
+Response:
+- Status(,'')
+- Body('')
+
+Possible errors:
+- Status(400, 'Email(`%newEmail%`) is already taken')
+- Status(404, User not found')
+- Status(401, 'Incorrect password for user')
+---
+##### Get user's links:
+Request:
+
+| POST variable | variable value |
+| --- | --- |
+| action | 'getUserLinks' |
+| email | '`%user's email%`' |
+| password | '`%user's password%`' |
+
+Response:
+- Status(200, 'Links returned')
+- Body('number:`%number of links%`; [[shortlink: `%shortlink%`, longlink: `%longlink%`, password: `%password%`], [], ...]')
+
+Possible errors:
+- Status(404, User not found')
+- Status(401, 'Incorrect password for user')
