@@ -144,7 +144,7 @@ Request:
 
 Response:
 - Status(200, 'Links returned')
-- Body('number:`%number of links%`; [[shortlink: `%shortlink%`, longlink: `%longlink%`, password: `%password%`], [], ...]')
+- Body('number:`%number of links%`; [{shortlink: `%shortlink%`, longlink: `%longlink%`, password: `%password%`}, {}, ...]')
 
 Possible errors:
 - Status(404, User not found')
