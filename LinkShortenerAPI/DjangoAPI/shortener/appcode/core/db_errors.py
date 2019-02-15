@@ -1,18 +1,34 @@
-class BaseDBError(Exception):
-    pass
+# base errors
 
 
-class DBConnectionError(BaseDBError):
-    pass
+class BaseDBError(Exception): pass
 
 
-class ShortLinkNotExists(BaseDBError):
-    pass
+class DBConnectionError(BaseDBError): pass
 
 
-class IncorrectPasswordForShortLink(BaseDBError):
-    pass
+class OtherDBError(BaseDBError): pass
 
 
-class ShortLinkAlreadyTaken(BaseDBError):
-    pass
+# links errors
+
+
+class ShortLinkNotExists(BaseDBError): pass
+
+
+class IncorrectPasswordForShortLink(BaseDBError): pass
+
+
+class ShortLinkAlreadyTaken(BaseDBError): pass
+
+
+# users errors
+
+
+class UserNotExists(BaseDBError): pass
+
+
+class WrongPassword(BaseDBError): pass
+
+
+class EmailAlreadyTaken(BaseDBError): pass
