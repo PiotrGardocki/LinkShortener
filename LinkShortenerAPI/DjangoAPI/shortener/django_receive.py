@@ -1,4 +1,4 @@
-from shortener.appcode.django_db.django_model import AccessToDjangoLinksDB
+from shortener.appcode.django_db.django_links_model import AccessToDjangoLinksDB
 
 from shortener.appcode.core.short_to_long import ShortToLongLinkTranslator
 from shortener.appcode.core.anon_shortlink_save import ShortlinkSaverForAnonymousUsers
