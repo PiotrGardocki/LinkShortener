@@ -82,8 +82,7 @@ Request:
 | POST variable | variable value |
 | --- | --- |
 | action | 'createUser' |
-| email | '`%user's email%`' |
-| password | '`%user's password%`' |
+| email;password | '`%user's email%`;`%user's password%`' |
 
 Response:
 - Status(201, 'User succesfully created')
@@ -97,8 +96,7 @@ Request:
 | POST variable | variable value |
 | --- | --- |
 | action | 'deleteUser' |
-| email | '`%user's email%`' |
-| password | '`%user's password%`' |
+| email;password | '`%user's email%`;`%user's password%`' |
 
 Response:
 - Status(200, 'User succesfully deleted')
@@ -113,8 +111,7 @@ Request:
 | POST variable | variable value |
 | --- | --- |
 | action | 'changeUserPassword' |
-| email | '`%user's email%`' |
-| oldPassword | '`%user's old password%`' |
+| email;oldPassword | '`%user's email%`;`%user's old password%`' |
 | newPassword | '`%user's new password%`' |
 
 Response:
@@ -130,9 +127,8 @@ Request:
 | POST variable | variable value |
 | --- | --- |
 | action | 'changeUserEmail' |
-| oldEmail | '`%user's old email%`' |
+| oldEmail;password | '`%user's old email%`;`%user's password%`' |
 | newEmail | '`%user's new email%`' |
-| password | '`%user's password%`' |
 
 Response:
 - Status(,'')
@@ -149,8 +145,7 @@ Request:
 | POST variable | variable value |
 | --- | --- |
 | action | 'getUserLinks' |
-| email | '`%user's email%`' |
-| password | '`%user's password%`' |
+| email;password | '`%user's email%`;`%user's password%`' |
 
 Response:
 - Status(200, 'Links returned')
