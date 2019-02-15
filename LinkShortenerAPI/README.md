@@ -4,7 +4,9 @@
 
 ##### Universal requests
 Status(HTTP Status Code, Reason Message) - it will be used as alias for all responses from the server
+
 Body(HTTP Content Text) - stands for string returned from server
+
 %string% - percent signs means, that value between them is a string, provided by client or server
 
 All requests needs to send POST variable 'action', which inform server what type of action you want to perform. Possible values will be provided in descriptions of all actions.
