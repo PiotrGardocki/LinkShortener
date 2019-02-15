@@ -2,12 +2,14 @@ from django.db import models, IntegrityError
 
 from shortener.appcode.core.links_db_access import LinksDBInterface
 from shortener.appcode.core.db_errors import *
+from shortener.appcode.django_db.django_users_model import UsersDB
 
 
 class LinksDB(models.Model):
     shortlink = models.CharField(max_length=40, primary_key=True)
     longlink = models.URLField()   # db_index, validators
     password = models.CharField(max_length=30)
+    user = models.ForeignKey(UsersDB, on_delete=models.CASCADE, null=True, blank=True)
 
 
 class AccessToDjangoLinksDB(LinksDBInterface):
@@ -15,7 +17,7 @@ class AccessToDjangoLinksDB(LinksDBInterface):
         row = LinksDB.objects.filter(shortlink__exact=shortlink)
         if not row.exists():
             raise ShortLinkNotExists("shortlink (%s) does not exists" % shortlink)
-
+# TODO: refactor
         row = row.get()
         if password != row.password:
             raise IncorrectPasswordForShortLink("password (%s) is incorrect for shortlink (%s)" % (shortlink, password))
