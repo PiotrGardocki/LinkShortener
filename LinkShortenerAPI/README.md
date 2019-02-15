@@ -82,7 +82,8 @@ Request:
 | POST variable | variable value |
 | --- | --- |
 | action | 'createUser' |
-| email;password | '`%user's email%`;`%user's password%`' |
+| email | '`%user's email%`' |
+| password | '`%user's password%`' |
 
 Response:
 - Status(201, 'User succesfully created')
