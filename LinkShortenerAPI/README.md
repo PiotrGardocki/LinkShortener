@@ -55,9 +55,9 @@ Request:
 | POST variable | variable value |
 | --- | --- |
 | action | 'anonCreateLink' |
-| shortlink | '`$shortlink(optional, when not provided it will be generated automatically)$`' |
-| longlink | '`$url$`' |
-| linkPassword | '`$password required to access the link(optional)$`' |
+| shortlink | '`%shortlink(optional, when not provided it will be generated automatically)%`' |
+| longlink | '`%url%`' |
+| linkPassword | '`%password required to access the link(optional)%`' |
 
 Response:
 - Status(201, 'Shortlink successfully added')
