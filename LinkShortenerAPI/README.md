@@ -13,9 +13,9 @@ All requests needs to send POST variable 'action', which inform server what type
 
 Possible errors in all actions:
 - Status(400, 'Request must be send by POST method')
-- Status(405, 'Action %action name% not supported')
+- Status(405, 'Action `%action name%` not supported')
 - Status(406, 'Not given 'action' parameter')
-- Status(406, 'Not given required parameters for this action: %list of parameters%')
+- Status(406, 'Not given required parameters for this action: `%list of parameters separated with semicolon%`')
 - Status(500, 'Internal Server Error')
 - ...or other HTTP Server errors...
 
@@ -26,8 +26,8 @@ Request:
 | POST variable | variable value |
 | --- | --- |
 | action | 'translate' |
-| shortlink | `%shortlink(without domain/IP part)%` |
-| linkPassword | `%password required to access the link(optional)%` |
+| shortlink | '`%shortlink(without domain/IP part)%`' |
+| linkPassword | '`%password required to access the link(optional)%`' |
 
 Response:
 - Status(200, 'Successful translation to longlink')
@@ -43,7 +43,7 @@ Request:
 | POST variable | variable value |
 | --- | --- |
 | action | 'checkLink' |
-| shortlink | `%shortlink(without domain/IP part)%` |
+| shortlink | '`%shortlink(without domain/IP part)%`' |
 
 Response:
 - Status()
@@ -55,9 +55,9 @@ Request:
 | POST variable | variable value |
 | --- | --- |
 | action | 'anonCreateLink' |
-| shortlink | `$shortlink(optional, when not provided it will be generated automatically)$` |
-| longlink | `$url$` |
-| linkPassword | `$password required to access the link(optional)$` |
+| shortlink | '`$shortlink(optional, when not provided it will be generated automatically)$`' |
+| longlink | '`$url$`' |
+| linkPassword | '`$password required to access the link(optional)$`' |
 
 Response:
 - Status(201, 'Shortlink successfully added')
