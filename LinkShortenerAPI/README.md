@@ -1,7 +1,7 @@
 ## Description of API
 
 ### Sending request to server
-
+---
 ##### Universal requests
 Status(HTTP Status Code, Reason Message) - it will be used as alias for all responses from the server
 
@@ -18,7 +18,7 @@ Possible errors in all actions:
 - Status(406, 'Not given required parameters for this action: `%list of parameters separated with semicolon%`')
 - Status(500, 'Internal Server Error')
 - ...or other HTTP Server errors...
-
+---
 ##### Translation from shortlink to longlink:
 
 Request:
@@ -36,7 +36,7 @@ Response:
 Possible errors:
 - Status(404, 'Shortlink not found')
 - Status(401, 'Incorrect password for shortlink')
-
+---
 ##### Checking the status of shortlink:
 Request:
 
@@ -48,7 +48,7 @@ Request:
 Response:
 - Status()
 - Body('exists: `%0-shortlink does not exists, 1-shortlink exists%`; needsPassword: `%0-no password, 1-link is secured%`')
-
+---
 ##### Creating shortlink(for anonymous users):
 Request:
 
