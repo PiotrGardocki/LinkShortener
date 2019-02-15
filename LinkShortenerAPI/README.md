@@ -19,7 +19,7 @@ Possible errors in all actions:
 - Status(500, 'Internal Server Error')
 - ...or other HTTP Server errors...
 
-##### Translation from shortlink to longlink
+##### Translation from shortlink to longlink:
 
 Request:
 
@@ -37,29 +37,30 @@ Possible errors:
 - Status(404, 'Shortlink not found')
 - Status(401, 'Incorrect password for shortlink')
 
-##### Checking if shortlink exists and needs password
-request {
-	action: 'checkLink'
-	shortlink: string(without domain/IP part)
-}
-response {
-	exists: '1'|'0'
-	needsPassword: '1'|'0'
-}
-possible errors {
-}
+##### Checking the status of shortlink:
+Request:
 
-##### Creating shortlink(anonymous users)
-request {
-	action: 'anonCreateLink'
-	shortlink: string(optional, when not provided it will be generated automatically)
-	longlink: string(url)
-	linkPassword: string(optional)
-}
-response {
-	Status(201, 'Shortlink successfully added')
-	shortlink: string(provided or generated)
-}
-possible errors {
-	Status(400, 'Shortlink already taken')
-}
+| POST variable | variable value |
+| --- | --- |
+| action | 'checkLink' |
+| shortlink | %shortlink(without domain/IP part)% |
+
+Response:
+- Status()
+- Body('exists: %0-shortlink does not exists, 1-shortlink exists%; needsPassword: %0-no password, 1-link is secured%')
+
+##### Creating shortlink(for anonymous users):
+Request:
+| POST variable | variable value |
+| --- | --- |
+| action | 'anonCreateLink' |
+| shortlink | $shortlink(optional, when not provided it will be generated automatically)$ |
+| longlink | $url$ |
+| linkPassword | $password required to access the link(optional)$ |
+
+Response:
+- Status(201, 'Shortlink successfully added')
+- Body('shortlink: %shortlink(provided or generated)%')
+
+Possible errors:
+- Status(400, 'Shortlink(%shortlink%) already taken')
