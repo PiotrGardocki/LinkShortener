@@ -1,8 +1,18 @@
 ## Description of API
 
 ### Sending request to server
+Table of contents:
+- [Universal requests](#universal-requests)
+- [Translation from shortlink to longlink](#translation-from-shortlink-to-longlink)
+- [Checking the status of shortlink](#checking-the-status-of-shortlink)
+- [Creating shortlink(for anonymous users)](#creating-shortlinkfor-anonymous-users)
+- [Creating user](#creating-user)
+- [Deleting user](#deleting-user)
+- [Changing user's password](#changing-users-password)
+- [Changing user's email](#changing-users-email)
+- [Get user's links](#get-users-links)
 ---
-##### Universal requests
+##### Universal requests:
 Status(HTTP Status Code, Reason Message) - it will be used as alias for all responses from the server
 
 Body(HTTP Content Text) - stands for string returned from server
