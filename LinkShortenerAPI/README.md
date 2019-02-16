@@ -7,6 +7,7 @@ Table of contents:
 - [Checking the status of shortlink](#checking-the-status-of-shortlink)
 - [Creating shortlink(for anonymous users)](#creating-shortlinkfor-anonymous-users)
 - [Creating user](#creating-user)
+- [Logging user in](#logging-user-in)
 - [Deleting user](#deleting-user)
 - [Changing user's password](#changing-users-password)
 - [Changing user's email](#changing-users-email)
@@ -44,8 +45,8 @@ Response:
 - Body('longlink: `%url%`')
 
 Possible errors:
-- Status(404, 'Shortlink not found')
 - Status(401, 'Incorrect password for shortlink')
+- Status(404, 'Shortlink not found')
 ---
 ##### Checking the status of shortlink:
 Request:
@@ -91,20 +92,37 @@ Response:
 Possible errors:
 - Status(400, 'Email(`%email%`) is already taken')
 ---
+##### Logging user in:
+Request:
+
+| POST variable | variable value |
+| --- | --- |
+| action | 'loginUserIn' |
+| email | '`%user's email%`' |
+| password | '`%user's password%`' |
+
+Response:
+- Status(201, 'User succesfully created')
+- Body('token: `%token that will be used to authenticate user's actions%`')
+
+Possible errors:
+- Status(401, 'Incorrect password for user')
+- Status(404, User not found')
+---
 ##### Deleting user:
 Request:
 
 | POST variable | variable value |
 | --- | --- |
 | action | 'deleteUser' |
-| email;password | '`%user's email%`;`%user's password%`' |
+| token | '`%token returned by logging in%`' |
 
 Response:
 - Status(200, 'User succesfully deleted')
 
 Possible errors:
-- Status(404, User not found')
 - Status(401, 'Incorrect password for user')
+- Status(404, User not found')
 ---
 ##### Changing user's password:
 Request:
@@ -112,15 +130,15 @@ Request:
 | POST variable | variable value |
 | --- | --- |
 | action | 'changeUserPassword' |
-| email;oldPassword | '`%user's email%`;`%user's old password%`' |
+| token | '`%token returned by logging in%`' |
 | newPassword | '`%user's new password%`' |
 
 Response:
 - Status(200, 'Password succesfully changed')
 
 Possible errors:
-- Status(404, User not found')
 - Status(401, 'Incorrect password for user')
+- Status(404, User not found')
 ---
 ##### Changing user's email:
 Request:
@@ -128,7 +146,7 @@ Request:
 | POST variable | variable value |
 | --- | --- |
 | action | 'changeUserEmail' |
-| oldEmail;password | '`%user's old email%`;`%user's password%`' |
+| token | '`%token returned by logging in%`' |
 | newEmail | '`%user's new email%`' |
 
 Response:
@@ -137,8 +155,8 @@ Response:
 
 Possible errors:
 - Status(400, 'Email(`%newEmail%`) is already taken')
-- Status(404, User not found')
 - Status(401, 'Incorrect password for user')
+- Status(404, User not found')
 ---
 ##### Get user's links:
 Request:
@@ -146,12 +164,12 @@ Request:
 | POST variable | variable value |
 | --- | --- |
 | action | 'getUserLinks' |
-| email;password | '`%user's email%`;`%user's password%`' |
+| token | '`%token returned by logging in%`' |
 
 Response:
 - Status(200, 'Links returned')
 - Body('number:`%number of links%`; [{shortlink: `%shortlink%`, longlink: `%longlink%`, password: `%password%`}, {}, ...]')
 
 Possible errors:
-- Status(404, User not found')
 - Status(401, 'Incorrect password for user')
+- Status(404, User not found')
