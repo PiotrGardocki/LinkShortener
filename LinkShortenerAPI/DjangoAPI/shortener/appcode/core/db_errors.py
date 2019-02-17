@@ -32,3 +32,6 @@ class WrongPassword(BaseDBError): pass
 
 
 class EmailAlreadyTaken(BaseDBError): pass
+
+
+class InvalidToken(BaseDBError): pass
