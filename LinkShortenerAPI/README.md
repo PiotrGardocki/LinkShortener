@@ -102,12 +102,26 @@ Request:
 | password | '`%user's password%`' |
 
 Response:
-- Status(201, 'User succesfully created')
+- Status(200, 'User succesfully logged in')
 - Body('token: `%token that will be used to authenticate user's actions%`')
 
 Possible errors:
 - Status(401, 'Incorrect password for user')
 - Status(404, User not found')
+---
+##### Logging user out:
+Request:
+
+| POST variable | variable value |
+| --- | --- |
+| action | 'loginUserOut' |
+| token | '`%token returned by logging in%`' |
+
+Response:
+- Status(200, 'User succesfully logged out')
+
+Possible errors:
+- Status(401, 'Invalid token')
 ---
 ##### Deleting user:
 Request:
@@ -121,8 +135,7 @@ Response:
 - Status(200, 'User succesfully deleted')
 
 Possible errors:
-- Status(401, 'Incorrect password for user')
-- Status(404, User not found')
+- Status(401, 'Invalid token')
 ---
 ##### Changing user's password:
 Request:
@@ -137,8 +150,7 @@ Response:
 - Status(200, 'Password succesfully changed')
 
 Possible errors:
-- Status(401, 'Incorrect password for user')
-- Status(404, User not found')
+- Status(401, 'Invalid token')
 ---
 ##### Changing user's email:
 Request:
@@ -155,8 +167,7 @@ Response:
 
 Possible errors:
 - Status(400, 'Email(`%newEmail%`) is already taken')
-- Status(401, 'Incorrect password for user')
-- Status(404, User not found')
+- Status(401, 'Invalid token')
 ---
 ##### Get user's links:
 Request:
@@ -171,5 +182,4 @@ Response:
 - Body('number:`%number of links%`; [{shortlink: `%shortlink%`, longlink: `%longlink%`, password: `%password%`}, {}, ...]')
 
 Possible errors:
-- Status(401, 'Incorrect password for user')
-- Status(404, User not found')
+- Status(401, 'Invalid token')
