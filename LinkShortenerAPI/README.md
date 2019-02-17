@@ -108,7 +108,7 @@ Response:
 
 Possible errors:
 - Status(401, 'Incorrect password for user')
-- Status(404, User not found')
+- Status(404, 'User not found')
 ---
 ##### Logging user out:
 Request:
@@ -123,6 +123,7 @@ Response:
 
 Possible errors:
 - Status(401, 'Invalid token')
+- Status(408, 'Token expired')
 ---
 ##### Deleting user:
 Request:
@@ -137,6 +138,7 @@ Response:
 
 Possible errors:
 - Status(401, 'Invalid token')
+- Status(408, 'Token expired')
 ---
 ##### Changing user's password:
 Request:
@@ -152,6 +154,7 @@ Response:
 
 Possible errors:
 - Status(401, 'Invalid token')
+- Status(408, 'Token expired')
 ---
 ##### Changing user's email:
 Request:
@@ -169,6 +172,7 @@ Response:
 Possible errors:
 - Status(400, 'Email(`%newEmail%`) is already taken')
 - Status(401, 'Invalid token')
+- Status(408, 'Token expired')
 ---
 ##### Get user's links:
 Request:
@@ -184,3 +188,4 @@ Response:
 
 Possible errors:
 - Status(401, 'Invalid token')
+- Status(408, 'Token expired')
