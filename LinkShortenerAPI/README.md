@@ -141,6 +141,7 @@ Possible errors:
 - Status(408, 'Token expired')
 ---
 ##### Changing user's password:
+Note that this operation logs user out
 Request:
 
 | POST variable | variable value |
@@ -157,6 +158,7 @@ Possible errors:
 - Status(408, 'Token expired')
 ---
 ##### Changing user's email:
+Note that this operation logs user out
 Request:
 
 | POST variable | variable value |
@@ -166,8 +168,7 @@ Request:
 | newEmail | '`%user's new email%`' |
 
 Response:
-- Status(,'')
-- Body('')
+- Status(200, 'Email succesfully changed')
 
 Possible errors:
 - Status(400, 'Email(`%newEmail%`) is already taken')
