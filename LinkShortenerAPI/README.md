@@ -142,6 +142,7 @@ Possible errors:
 ---
 ##### Changing user's password:
 Note that this operation logs user out
+
 Request:
 
 | POST variable | variable value |
@@ -159,6 +160,7 @@ Possible errors:
 ---
 ##### Changing user's email:
 Note that this operation logs user out
+
 Request:
 
 | POST variable | variable value |
