@@ -21,6 +21,30 @@ class UsersActions:
             # TODO add some log saving
             raise BaseException("Other Python error occurred")
 
+    def log_user_in(self, email, password):
+        try:
+            self.db_interface.log_user_in(email, password)
+        except (UserNotExists, WrongPassword) as error:
+            raise error
+        except BaseDBError as error:
+            # TODO add some log saving
+            raise BaseDBError("Other application error occurred")
+        except BaseException as error:
+            # TODO add some log saving
+            raise BaseException("Other Python error occurred")
+
+    def log_user_out(self, token):
+        try:
+            self.db_interface.log_user_out(token)
+        except InvalidToken as error:
+            raise error
+        except BaseDBError as error:
+            # TODO add some log saving
+            raise BaseDBError("Other application error occurred")
+        except BaseException as error:
+            # TODO add some log saving
+            raise BaseException("Other Python error occurred")
+
     def delete_user(self, token):
         try:
             self.db_interface.delete_user(token)
@@ -49,30 +73,6 @@ class UsersActions:
         try:
             self.db_interface.delete_email(token, new_email)
         except (InvalidToken, EmailAlreadyTaken) as error:
-            raise error
-        except BaseDBError as error:
-            # TODO add some log saving
-            raise BaseDBError("Other application error occurred")
-        except BaseException as error:
-            # TODO add some log saving
-            raise BaseException("Other Python error occurred")
-
-    def log_user_in(self, email, password):
-        try:
-            self.db_interface.log_user_in(email, password)
-        except (UserNotExists, WrongPassword) as error:
-            raise error
-        except BaseDBError as error:
-            # TODO add some log saving
-            raise BaseDBError("Other application error occurred")
-        except BaseException as error:
-            # TODO add some log saving
-            raise BaseException("Other Python error occurred")
-
-    def log_user_out(self, token):
-        try:
-            self.db_interface.log_user_out(token)
-        except InvalidToken as error:
             raise error
         except BaseDBError as error:
             # TODO add some log saving
