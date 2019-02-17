@@ -8,6 +8,7 @@ Table of contents:
 - [Creating shortlink(for anonymous users)](#creating-shortlinkfor-anonymous-users)
 - [Creating user](#creating-user)
 - [Logging user in](#logging-user-in)
+- [Logging user out](#logging-user-out)
 - [Deleting user](#deleting-user)
 - [Changing user's password](#changing-users-password)
 - [Changing user's email](#changing-users-email)
