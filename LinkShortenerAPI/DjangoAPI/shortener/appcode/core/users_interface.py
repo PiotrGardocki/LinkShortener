@@ -29,6 +29,3 @@ class UsersInterface:
     @staticmethod
     def generate_token_for_user():
         pass
-
-    def get_user_shotlinks_table(self, token):
-        pass
