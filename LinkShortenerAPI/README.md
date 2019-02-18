@@ -128,7 +128,6 @@ Response:
 
 Possible errors:
 - Status(401, 'Invalid token')
-- Status(408, 'Token expired')
 ---
 ##### Deleting user:
 Request:
