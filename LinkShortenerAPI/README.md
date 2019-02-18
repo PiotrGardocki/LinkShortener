@@ -19,15 +19,15 @@ Status(HTTP Status Code, Reason Message) - it will be used as alias for all resp
 
 Body(HTTP Content Text) - stands for string returned from server
 
-`%string%` - percent signs means, that value between them is a string, provided by client or server
+`string` - green color means, that value in it is a string, provided by client or server
 
 All requests needs to send POST variable 'action', which inform server what type of action you want to perform. Possible values will be provided in descriptions of all actions.
 
 Possible errors in all actions:
 - Status(400, 'Request must be send by POST method')
-- Status(405, 'Action `%action name%` is not supported')
+- Status(405, 'Action `action name` is not supported')
 - Status(406, 'Not given 'action' parameter')
-- Status(406, 'Not given required parameters for this action: `%list of parameters separated with semicolon%`')
+- Status(406, 'Not given required parameters for this action: `list of parameters separated with semicolon`')
 - Status(500, 'Internal Server Error')
 - ...or other HTTP Server errors...
 ---
@@ -38,12 +38,12 @@ Request:
 | POST variable | variable value |
 | --- | --- |
 | action | 'translate' |
-| shortlink | '`%shortlink(without domain/IP part)%`' |
-| linkPassword | '`%password required to access the link(optional)%`' |
+| shortlink | '`shortlink(without domain/IP part)`' |
+| linkPassword | '`password required to access the link(optional)`' |
 
 Response:
 - Status(200, 'Successful translation to longlink')
-- Body('longlink: `%url%`')
+- Body('longlink: `url`')
 
 Possible errors:
 - Status(401, 'Incorrect password for shortlink')
@@ -55,11 +55,11 @@ Request:
 | POST variable | variable value |
 | --- | --- |
 | action | 'checkLink' |
-| shortlink | '`%shortlink(without domain/IP part)%`' |
+| shortlink | '`shortlink(without domain/IP part)`' |
 
 Response:
 - Status(200, 'Request done')
-- Body('exists: `%0 or 1%`; needsPassword: `%0 or 1%`; belongsToUser: `%0 or 1%`; expiration date: `%None or date in format 'yyyy-mm-dd'%`')
+- Body('exists: `0 or 1`; needsPassword: `0 or 1`; belongsToUser: `0 or 1`; expiration date: `None or date in format 'yyyy-mm-dd'`')
 
 0 means that state is false, 1 means that state is true, None means that shortlink has not expiration date
 
@@ -72,16 +72,16 @@ Request:
 | POST variable | variable value |
 | --- | --- |
 | action | 'anonCreateLink' |
-| shortlink | '`%shortlink(optional, when not provided it will be generated automatically)%`' |
-| longlink | '`%url%`' |
-| linkPassword | '`%password required to access the link(optional)%`' |
+| shortlink | '`shortlink(optional, when not provided it will be generated automatically)`' |
+| longlink | '`url`' |
+| linkPassword | '`password required to access the link(optional)`' |
 
 Response:
 - Status(201, 'Shortlink successfully added')
-- Body('shortlink: `%shortlink(provided or generated)%`')
+- Body('shortlink: `shortlink(provided or generated)`')
 
 Possible errors:
-- Status(400, 'Shortlink(`%shortlink%`) is already taken')
+- Status(400, 'Shortlink(`shortlink`) is already taken')
 ---
 ##### Creating user:
 Request:
@@ -89,14 +89,14 @@ Request:
 | POST variable | variable value |
 | --- | --- |
 | action | 'createUser' |
-| email | '`%user's email%`' |
-| password | '`%user's password%`' |
+| email | '`user's email`' |
+| password | '`user's password`' |
 
 Response:
 - Status(201, 'User succesfully created')
 
 Possible errors:
-- Status(400, 'Email(`%email%`) is already taken')
+- Status(400, 'Email(`email`) is already taken')
 ---
 ##### Logging user in:
 Request:
@@ -104,12 +104,12 @@ Request:
 | POST variable | variable value |
 | --- | --- |
 | action | 'loginUserIn' |
-| email | '`%user's email%`' |
-| password | '`%user's password%`' |
+| email | '`user's email`' |
+| password | '`user's password`' |
 
 Response:
 - Status(200, 'User succesfully logged in')
-- Body('token: `%token that will be used to authenticate user's actions%`')
+- Body('token: `token that will be used to authenticate user's actions`')
 
 Possible errors:
 - Status(401, 'Incorrect password for user')
@@ -121,7 +121,7 @@ Request:
 | POST variable | variable value |
 | --- | --- |
 | action | 'loginUserOut' |
-| token | '`%token returned by logging in%`' |
+| token | '`token returned by logging in`' |
 
 Response:
 - Status(200, 'User succesfully logged out')
@@ -136,7 +136,7 @@ Request:
 | POST variable | variable value |
 | --- | --- |
 | action | 'deleteUser' |
-| token | '`%token returned by logging in%`' |
+| token | '`token returned by logging in`' |
 
 Response:
 - Status(200, 'User succesfully deleted')
@@ -153,8 +153,8 @@ Request:
 | POST variable | variable value |
 | --- | --- |
 | action | 'changeUserPassword' |
-| token | '`%token returned by logging in%`' |
-| newPassword | '`%user's new password%`' |
+| token | '`token returned by logging in`' |
+| newPassword | '`user's new password`' |
 
 Response:
 - Status(200, 'Password succesfully changed')
@@ -171,14 +171,14 @@ Request:
 | POST variable | variable value |
 | --- | --- |
 | action | 'changeUserEmail' |
-| token | '`%token returned by logging in%`' |
-| newEmail | '`%user's new email%`' |
+| token | '`token returned by logging in`' |
+| newEmail | '`user's new email`' |
 
 Response:
 - Status(200, 'Email succesfully changed')
 
 Possible errors:
-- Status(400, 'Email(`%newEmail%`) is already taken')
+- Status(400, 'Email(`newEmail`) is already taken')
 - Status(401, 'Invalid token')
 - Status(408, 'Token expired')
 ---
@@ -188,11 +188,11 @@ Request:
 | POST variable | variable value |
 | --- | --- |
 | action | 'getUserLinks' |
-| token | '`%token returned by logging in%`' |
+| token | '`token returned by logging in`' |
 
 Response:
 - Status(200, 'Links returned')
-- Body('number:`%number of links%`; [{shortlink: `%shortlink%`, longlink: `%longlink%`, password: `%password%`}, {}, ...]')
+- Body('number:`number of links`; [{shortlink: `shortlink`, longlink: `longlink`, password: `password`}, {}, ...]')
 
 Possible errors:
 - Status(401, 'Invalid token')
