@@ -1,6 +1,6 @@
 from shortener.appcode.core.users_interface import UsersInterface
 from shortener.appcode.core.type_valid import validate_type
-from shortener.appcode.core.db_errors import WrongPassword, UserNotExists, EmailAlreadyTaken, BaseDBError, InvalidToken
+from shortener.appcode.core.db_errors import *
 
 
 class UsersActions:
@@ -23,7 +23,7 @@ class UsersActions:
 
     def log_user_in(self, email, password):
         try:
-            self.db_interface.log_user_in(email, password)
+            return self.db_interface.log_user_in(email, password)
         except (UserNotExists, WrongPassword) as error:
             raise error
         except BaseDBError as error:
@@ -36,7 +36,7 @@ class UsersActions:
     def log_user_out(self, token):
         try:
             self.db_interface.log_user_out(token)
-        except InvalidToken as error:
+        except (InvalidToken, TokenExpired) as error:
             raise error
         except BaseDBError as error:
             # TODO add some log saving
@@ -48,7 +48,7 @@ class UsersActions:
     def delete_user(self, token):
         try:
             self.db_interface.delete_user(token)
-        except InvalidToken as error:
+        except (InvalidToken, TokenExpired) as error:
             raise error
         except BaseDBError as error:
             # TODO add some log saving
@@ -60,7 +60,7 @@ class UsersActions:
     def change_user_password(self, token, new_password):
         try:
             self.db_interface.delete_email(token, new_password)
-        except InvalidToken as error:
+        except (InvalidToken, TokenExpired) as error:
             raise error
         except BaseDBError as error:
             # TODO add some log saving
@@ -72,7 +72,7 @@ class UsersActions:
     def change_user_email(self, token, new_email):
         try:
             self.db_interface.delete_email(token, new_email)
-        except (InvalidToken, EmailAlreadyTaken) as error:
+        except (InvalidToken, TokenExpired, EmailAlreadyTaken) as error:
             raise error
         except BaseDBError as error:
             # TODO add some log saving
