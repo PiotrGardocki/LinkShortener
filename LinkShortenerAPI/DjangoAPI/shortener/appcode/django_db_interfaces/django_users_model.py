@@ -1,5 +1,4 @@
 from django.db import IntegrityError, transaction
-
 from django.core.exceptions import ObjectDoesNotExist
 
 from shortener.appcode.core.users_interface import UsersInterface
@@ -98,7 +97,7 @@ class AccessToDjangoUsersDB(UsersInterface):
 
         for i in range(30):
             token += random.choice(letters)
-        # shortlink = random.choices(letters, k=6)
+        # shortlink = random.choices(letters, k=30)
 
         return token
 
