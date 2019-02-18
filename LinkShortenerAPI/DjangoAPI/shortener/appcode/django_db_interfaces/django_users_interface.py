@@ -11,18 +11,11 @@ import random
 
 class AccessToDjangoUsersDB(UsersInterface):
     def create_user(self, email, password):
-        try:
-            UsersDB.objects.create(email=email, password=password)
-        except IntegrityError:
-            raise EmailAlreadyTaken("email(%s) is already taken" % email)
+        self.create_and_get_user(email, password)
 
     def delete_user(self, token):
         user = self.get_user_for_token(token)
-
-        deleted_users = user.delete()[1]['shortener.UsersDB']
-
-        if deleted_users != 1:
-            raise OtherDBError("User has not been deleted properly")
+        self.delete_user_by_usersdb_instance(user)
 
     def change_user_password(self, token, new_password):
         user = self.get_user_for_token(token)
@@ -104,3 +97,15 @@ class AccessToDjangoUsersDB(UsersInterface):
     @staticmethod
     def get_token_expiration_time():
         return datetime.datetime.today() + datetime.timedelta(minutes=10)
+
+    def create_and_get_user(self, email, password):
+        try:
+            return UsersDB.objects.create(email=email, password=password)
+        except IntegrityError:
+            raise EmailAlreadyTaken("Email(%s) is already taken" % email)
+
+    def delete_user_by_usersdb_instance(self, user):
+        num_of_deleted_users = user.delete()[1]['shortener.UsersDB']
+
+        if num_of_deleted_users != 1:
+            raise OtherDBError("User has not been deleted properly")
