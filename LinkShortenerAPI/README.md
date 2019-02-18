@@ -25,7 +25,7 @@ All requests needs to send POST variable 'action', which inform server what type
 
 Possible errors in all actions:
 - Status(400, 'Request must be send by POST method')
-- Status(405, 'Action `%action name%` not supported')
+- Status(405, 'Action `%action name%` is not supported')
 - Status(406, 'Not given 'action' parameter')
 - Status(406, 'Not given required parameters for this action: `%list of parameters separated with semicolon%`')
 - Status(500, 'Internal Server Error')
