@@ -60,9 +60,11 @@ Request:
 Response:
 - Status(200, 'Request done')
 - Body('exists: `%0 or 1%`; needsPassword: `%0 or 1%`; belongsToUser: `%0 or 1%`; expiration date: `%None or date in format 'yyyy-mm-dd'%`')
+
 0 means that state is false, 1 means that state is true, None means that shortlink has not expiration date
 
 If shortlink does not exist, all values will be set to 0/None
+
 ---
 ##### Creating shortlink(for anonymous users):
 Request:
