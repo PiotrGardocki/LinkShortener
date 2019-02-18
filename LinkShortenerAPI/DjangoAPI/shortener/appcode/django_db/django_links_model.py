@@ -1,6 +1,6 @@
 from django.db import models, IntegrityError
 
-from shortener.appcode.core.links_db_access import LinksInterface
+from shortener.appcode.core.links_interface import LinksInterface
 from shortener.appcode.core.db_errors import *
 from shortener.appcode.django_db.django_users_model import UsersDB
 

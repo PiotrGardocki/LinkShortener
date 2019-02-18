@@ -1,4 +1,4 @@
-from shortener.appcode.core.links_db_access import LinksInterface
+from shortener.appcode.core.links_interface import LinksInterface
 from shortener.appcode.core.type_valid import validate_type
 from shortener.appcode.core.db_errors import ShortLinkNotExists, IncorrectPasswordForShortLink, BaseDBError
 
