@@ -43,7 +43,8 @@ class AccessToDjangoUsersDB(UsersInterface):
         with transaction.atomic():
             self.create_user(new_email, password)
             self.delete_user(token)
-            self.expire_token(token)
+            # TODO dodac zmiane uzytkownika w linkach !!!
+        self.expire_token(token)
 
     def log_user_in(self, email, password):
         try:
@@ -59,7 +60,7 @@ class AccessToDjangoUsersDB(UsersInterface):
         while not token_creation_succesful:
             try:
                 user.token = self.generate_token_for_user()
-                expiration_time = self.get_expiration_time()
+                expiration_time = self.get_token_expiration_time()
                 user.token_expiration = expiration_time
                 user.save()
                 token_creation_succesful = True
@@ -73,7 +74,7 @@ class AccessToDjangoUsersDB(UsersInterface):
 
     def extend_token(self, token):
         user = self.get_user_for_token(token)
-        user.token_expiration = self.get_expiration_time()
+        user.token_expiration = self.get_token_expiration_time()
         user.save()
 
     def expire_token(self, token):
@@ -91,7 +92,7 @@ class AccessToDjangoUsersDB(UsersInterface):
             user = UsersDB.objects.get(token=token)
             if user.token_expiration < datetime.datetime.today():
                 self.expire_token(token)
-                raise InvalidToken("Given token expired")
+                raise TokenExpired("Given token expired")
             return user
         except ObjectDoesNotExist:
             raise InvalidToken("Given token is invalid")
@@ -108,5 +109,5 @@ class AccessToDjangoUsersDB(UsersInterface):
         return token
 
     @staticmethod
-    def get_expiration_time():
+    def get_token_expiration_time():
         return datetime.datetime.today() + datetime.timedelta(minutes=10)
