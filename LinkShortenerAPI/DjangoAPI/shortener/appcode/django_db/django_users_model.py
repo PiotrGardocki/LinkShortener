@@ -1,19 +1,13 @@
-from django.db import models, IntegrityError, transaction
+from django.db import IntegrityError, transaction
 
 from django.core.exceptions import ObjectDoesNotExist
 
 from shortener.appcode.core.users_interface import UsersInterface
 from shortener.appcode.core.db_errors import *
+from shortener.appcode.django_models.users_model import UsersDB
 
 import datetime
 import random
-
-
-class UsersDB(models.Model):
-    email = models.EmailField(primary_key=True)
-    password = models.CharField(max_length=30)
-    token = models.CharField(max_length=30, unique=True, null=True, default=None)
-    token_expiration = models.DateTimeField(null=True)
 
 
 class AccessToDjangoUsersDB(UsersInterface):

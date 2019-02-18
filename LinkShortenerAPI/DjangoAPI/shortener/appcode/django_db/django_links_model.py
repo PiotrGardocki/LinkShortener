@@ -1,15 +1,9 @@
-from django.db import models, IntegrityError
+from django.db import IntegrityError
 
 from shortener.appcode.core.links_interface import LinksInterface
 from shortener.appcode.core.db_errors import *
-from shortener.appcode.django_db.django_users_model import UsersDB
-
-
-class LinksDB(models.Model):
-    shortlink = models.CharField(max_length=40, primary_key=True)
-    longlink = models.URLField()   # db_index, validators
-    password = models.CharField(max_length=30)
-    user = models.ForeignKey(UsersDB, on_delete=models.CASCADE, null=True, blank=True)
+from shortener.appcode.django_models.links_model import LinksDB
+from shortener.appcode.django_models.users_model import UsersDB
 
 
 class AccessToDjangoLinksDB(LinksInterface):
