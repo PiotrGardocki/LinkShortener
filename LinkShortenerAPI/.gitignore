@@ -109,3 +109,4 @@ venv.bak/
 # other stuff
 .txt
 migrations/
+testing.py
