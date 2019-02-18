@@ -16,9 +16,7 @@ class ShortToLongLinkTranslator:
         try:
             longlink = self.db_interface.get_longlink_from_shortlink(shortlink, password)
             return longlink
-        except ShortLinkNotExists as error:
-            raise error
-        except IncorrectPasswordForShortLink as error:
+        except (ShortLinkNotExists, IncorrectPasswordForShortLink) as error:
             raise error
         except BaseDBError as error:
             # TODO add some log saving
@@ -29,6 +27,8 @@ class ShortToLongLinkTranslator:
 
     def check_if_shortlink_requires_password(self, shortlink):
         validate_type(shortlink, str, 'shortlink must be str type')
+
+        # TODO do poprawki
 
         try:
             requires = self.db_interface.check_if_shortlink_has_password(shortlink)
