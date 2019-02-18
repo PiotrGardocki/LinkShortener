@@ -19,7 +19,7 @@ Status(HTTP Status Code, Reason Message) - it will be used as alias for all resp
 
 Body(HTTP Content Text) - stands for string returned from server
 
-`string` - green color means, that value in it is a string, provided by client or server
+`string` - grey color means, that value in it is a string, provided by client or server
 
 All requests needs to send POST variable 'action', which inform server what type of action you want to perform. Possible values will be provided in descriptions of all actions.
 
