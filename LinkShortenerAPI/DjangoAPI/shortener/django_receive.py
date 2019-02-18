@@ -1,5 +1,5 @@
-from shortener.appcode.django_db.django_links_model import AccessToDjangoLinksDB
-from shortener.appcode.django_db.django_users_model import AccessToDjangoUsersDB
+from shortener.appcode.django_db_interfaces.django_links_interface import AccessToDjangoLinksDB
+from shortener.appcode.django_db_interfaces.django_users_interface import AccessToDjangoUsersDB
 
 from shortener.appcode.core.short_to_long import ShortToLongLinkTranslator
 from shortener.appcode.core.anon_shortlink_save import ShortlinkSaverForAnonymousUsers
@@ -62,8 +62,8 @@ class DjangoRequestReceiver:
             #     return DjangoRequestReceiver.handle_action_(request)
         except MissedParameters as error:
             return error.response
-        except BaseException as error:
-            return HttpResponse(status=500, reason='Internal Server Error(%s)' % str(error)) # TODO add log saving
+        except BaseException:
+            return HttpResponse(status=500, reason='Internal Server Error')  # TODO add log saving
 
         return HttpResponse(status=405, reason="Action '%s' is not supported" % action)
 
