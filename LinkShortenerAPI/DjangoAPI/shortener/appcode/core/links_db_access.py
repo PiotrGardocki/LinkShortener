@@ -1,4 +1,4 @@
-class LinksDBInterface:
+class LinksInterface:
     def get_longlink_from_shortlink(self, shortlink, password=''):
         pass
 

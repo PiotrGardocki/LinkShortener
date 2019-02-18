@@ -1,12 +1,12 @@
-from shortener.appcode.core.links_db_access import LinksDBInterface
+from shortener.appcode.core.links_db_access import LinksInterface
 from shortener.appcode.core.type_valid import validate_type
 from shortener.appcode.core.db_errors import ShortLinkNotExists, IncorrectPasswordForShortLink, BaseDBError
 
 
 class ShortToLongLinkTranslator:
     def __init__(self, links_interface):
-        validate_type(links_interface, LinksDBInterface,
-                      'type of links_interface should be derived from LinksDBInterface')
+        validate_type(links_interface, LinksInterface,
+                      'type of links_interface should be derived from LinksInterface')
         self.db_interface = links_interface
 
     def translate_shortlink_to_longlink(self, shortlink, password=''):

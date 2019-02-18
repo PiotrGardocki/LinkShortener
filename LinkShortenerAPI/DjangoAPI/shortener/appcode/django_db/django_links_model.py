@@ -1,6 +1,6 @@
 from django.db import models, IntegrityError
 
-from shortener.appcode.core.links_db_access import LinksDBInterface
+from shortener.appcode.core.links_db_access import LinksInterface
 from shortener.appcode.core.db_errors import *
 from shortener.appcode.django_db.django_users_model import UsersDB
 
@@ -12,7 +12,7 @@ class LinksDB(models.Model):
     user = models.ForeignKey(UsersDB, on_delete=models.CASCADE, null=True, blank=True)
 
 
-class AccessToDjangoLinksDB(LinksDBInterface):
+class AccessToDjangoLinksDB(LinksInterface):
     def get_longlink_from_shortlink(self, shortlink, password=''):
         row = LinksDB.objects.filter(shortlink__exact=shortlink)
         if not row.exists():
