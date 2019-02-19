@@ -11,7 +11,7 @@ import random
 
 class AccessToDjangoUsersDB(UsersInterface):
     def create_user(self, email, password):
-        self.create_and_get_user(email, password)
+        self.create_and_get_usersdb_instance(email, password)
 
     def delete_user(self, token):
         user = self.get_user_for_token(token)
@@ -22,14 +22,6 @@ class AccessToDjangoUsersDB(UsersInterface):
 
         user.password = new_password
         user.save()
-        self.expire_token(token)
-
-    def change_user_email(self, token, new_email):
-        password = self.get_user_for_token(token).password
-        with transaction.atomic():
-            self.create_user(new_email, password)
-            self.delete_user(token)
-            # TODO dodac zmiane uzytkownika w linkach !!!
         self.expire_token(token)
 
     def log_user_in(self, email, password):
@@ -98,7 +90,7 @@ class AccessToDjangoUsersDB(UsersInterface):
     def get_token_expiration_time():
         return datetime.datetime.today() + datetime.timedelta(minutes=10)
 
-    def create_and_get_user(self, email, password):
+    def create_and_get_usersdb_instance(self, email, password):
         try:
             return UsersDB.objects.create(email=email, password=password)
         except IntegrityError:

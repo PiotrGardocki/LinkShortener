@@ -8,10 +8,10 @@ class UsersLinksInterface:
     def modify_shortlink(self, user_token, old_shortlink, new_shortlink):
         pass
 
-    def modify_longlink(self, user_token, shortlink, old_longlink, new_longlik):
+    def modify_longlink(self, user_token, shortlink, new_longlik):
         pass
 
-    def modify_password(self, user_token, shortlink, old_password, new_password):
+    def modify_password(self, user_token, shortlink, new_password):
         pass
 
     def change_user_email(self, token, new_email):

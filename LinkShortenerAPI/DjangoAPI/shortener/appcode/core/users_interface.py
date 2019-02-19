@@ -8,9 +8,6 @@ class UsersInterface:
     def change_user_password(self, token, new_password):
         pass
 
-    def change_user_email(self, token, new_email):
-        pass
-
     def log_user_in(self, email, password):
         pass
 
