@@ -191,7 +191,7 @@ Request:
 
 Response:
 - Status(200, 'Links returned')
-- Body('number:`number of links`; [{shortlink: `shortlink`, longlink: `longlink`, password: `password`}, {}, ...]')
+- Body('{[{"shortlink": "`shortlink`", "longlink": "`longlink`", "password": "`password`"}, {}, ...]}')
 
 Possible errors:
 - Status(401, 'Invalid token')
