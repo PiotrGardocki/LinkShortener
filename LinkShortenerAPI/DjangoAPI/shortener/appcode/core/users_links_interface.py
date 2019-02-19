@@ -1,5 +1,5 @@
 class UsersLinksInterface:
-    def add_link(self, user_token, shortlink, longlink, password):
+    def add_link(self, user_token, shortlink, longlink, password=''):
         pass
 
     def delete_link(self, user_token, shortlink):
@@ -14,8 +14,8 @@ class UsersLinksInterface:
     def modify_password(self, user_token, shortlink, new_password):
         pass
 
-    def change_user_email(self, token, new_email):
+    def change_user_email(self, user_token, new_email):
         pass
 
-    def get_user_shotlinks_table(self, token):
+    def get_user_shotlinks_table(self, user_token):
         pass
