@@ -10,20 +10,20 @@ class ShortlinkData:
         self.set_expiration_date(expiration_date)
 
     def set_does_exist(self, does_exist):
-        validate_type(does_exist, bool, 'does_exist must be bool type')
+        validate_type(does_exist, bool, 'Type of does_exist must be bool')
         self.does_exist = does_exist
 
     def set_if_need_password(self, need_password):
-        validate_type(need_password, bool, 'need_password must be bool type')
+        validate_type(need_password, bool, 'Type of need_password must be bool')
         self.does_exist = need_password
 
     def set_if_belongs_to_user(self, belongs_to_user):
-        validate_type(belongs_to_user, bool, 'belongs_to_user must be bool type')
+        validate_type(belongs_to_user, bool, 'Type of belongs_to_user must be bool')
         self.does_exist = belongs_to_user
 
     def set_expiration_date(self, expiration_date):
         validate_list_of_types(expiration_date, [datetime.date, None],
-                               'expiration_date must be datetime.date or None type')
+                               'Type of expiration_date must be datetime.date or None')
         self.expiration_date = expiration_date
 
     def exists(self):
