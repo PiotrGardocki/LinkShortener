@@ -141,10 +141,10 @@ Request:
 | POST variable | variable value |
 | --- | --- |
 | action | 'anonCreateLink' |
-| shortlink | '`shortlink(optional, when not provided it will be generated automatically)`' |
+| shortlink | '`shortlink(without domain/IP part, optional - when not provided it will be generated automatically)`' |
 | longlink | '`url`' |
 | linkPassword | '`password required to access the link(optional)`' |
-| token | '`user's token(optional, when not provided shortlink will be anonymous and will expire after 7 days)`' |
+| token | '`user's token(optional - when not provided shortlink will be anonymous and will expire after 7 days)`' |
 
 Response:
 - Status(201, 'Shortlink successfully added')
@@ -162,7 +162,7 @@ Request:
 | --- | --- |
 | action | 'deleteShortlink' |
 | token | '`token returned by logging in`' |
-| shortlink | '`shortlink`' |
+| shortlink | '`shortlink(without domain/IP part)`' |
 
 Response:
 - Status(200, 'Shortlink succesfully deleted')
@@ -178,14 +178,14 @@ Request:
 | --- | --- |
 | action | 'modifyShortlink' |
 | token | '`token returned by logging in`' |
-| shortlink | '`shortlink`' |
-| newShortlink | '`new shortlink`' |
+| shortlink | '`shortlink(without domain/IP part)`' |
+| newShortlink | '`new shortlink(without domain/IP part)`' |
 
 Response:
 - Status(200, 'Shortlink succesfully modified')
 
 Possible errors:
-- Status(400, 'Shortlink(`shortlink`) is already taken')
+- Status(400, 'Shortlink(`new shortlink`) is already taken')
 - Status(401, 'Invalid token')
 - Status(408, 'Token expired')
 ---
@@ -196,7 +196,7 @@ Request:
 | --- | --- |
 | action | 'modifyLonglink' |
 | token | '`token returned by logging in`' |
-| shortlink | '`shortlink`' |
+| shortlink | '`shortlink(without domain/IP part)`' |
 | newLonglink | '`new longlink`' |
 
 Response:
@@ -211,9 +211,9 @@ Request:
 
 | POST variable | variable value |
 | --- | --- |
-| action | '' |
+| action | 'modifyPassword' |
 | token | '`token returned by logging in`' |
-| shortlink | '`shortlink`' |
+| shortlink | '`shortlink(without domain/IP part)`' |
 | newPassword | '`new password`' |
 
 Response:
