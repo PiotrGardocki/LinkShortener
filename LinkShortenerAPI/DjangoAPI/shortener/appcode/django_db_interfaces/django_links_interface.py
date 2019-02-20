@@ -7,6 +7,7 @@ from shortener.appcode.django_models.links_model import LinksDB
 from shortener.appcode.core.shortlink_data import ShortlinkData
 
 import random
+import datetime
 
 
 class AccessToDjangoLinksDB(LinksInterface):
@@ -37,7 +38,7 @@ class AccessToDjangoLinksDB(LinksInterface):
 
         expiration_date = row.expiration_date
 
-        return ShortlinkData(has_password, is_from_user, expiration_date)
+        return ShortlinkData(True, has_password, is_from_user, expiration_date)
 
     def add_anonymous_shortlink(self, longlink, password=''):
         shortlink_creation_succesful = False
@@ -46,7 +47,9 @@ class AccessToDjangoLinksDB(LinksInterface):
         while not shortlink_creation_succesful:
             try:
                 shortlink = AccessToDjangoLinksDB.generate_random_shortlink()
-                LinksDB.objects.create(shortlink=shortlink, longlink=longlink, password=password)
+                expire_date = AccessToDjangoLinksDB.get_default_expire_date()
+                LinksDB.objects.create(shortlink=shortlink, longlink=longlink,
+                                       password=password, expire_date=expire_date)
                 shortlink_creation_succesful = True
             except IntegrityError:
                 shortlink_creation_succesful = False
@@ -63,3 +66,7 @@ class AccessToDjangoLinksDB(LinksInterface):
         # shortlink = random.choices(letters, k=6)
 
         return shortlink
+
+    @staticmethod
+    def get_default_expire_date():
+        return datetime.date.today() + datetime.timedelta(days=7)
