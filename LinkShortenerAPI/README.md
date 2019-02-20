@@ -169,6 +169,7 @@ Response:
 
 Possible errors:
 - Status(401, 'Invalid token')
+- Status(404, 'Shortlink not found')
 - Status(408, 'Token expired')
 ---
 ##### Modify shortlink:
@@ -187,6 +188,7 @@ Response:
 Possible errors:
 - Status(400, 'Shortlink(`new shortlink`) is already taken')
 - Status(401, 'Invalid token')
+- Status(404, 'Shortlink not found')
 - Status(408, 'Token expired')
 ---
 ##### Modify longlink:
@@ -204,6 +206,7 @@ Response:
 
 Possible errors:
 - Status(401, 'Invalid token')
+- Status(404, 'Shortlink not found')
 - Status(408, 'Token expired')
 ---
 ##### Modify shortlink's password:
@@ -221,6 +224,7 @@ Response:
 
 Possible errors:
 - Status(401, 'Invalid token')
+- Status(404, 'Shortlink not found')
 - Status(408, 'Token expired')
 ---
 ##### Translation from shortlink to longlink:
