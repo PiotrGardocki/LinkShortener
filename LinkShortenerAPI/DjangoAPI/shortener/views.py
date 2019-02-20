@@ -11,5 +11,8 @@ def index(request):
     except BaseException:
         response = HttpResponse(status=500, reason='Another server error occured')
 
+    if not isinstance(response, HttpResponse):
+        response = HttpResponse(status=500, reason='Another server error occured')
+
     response["Access-Control-Allow-Origin"] = "*"
     return response
