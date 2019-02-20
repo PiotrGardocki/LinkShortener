@@ -140,7 +140,7 @@ Request:
 
 | POST variable | variable value |
 | --- | --- |
-| action | 'anonCreateLink' |
+| action | 'createLink' |
 | shortlink | '`shortlink(without domain/IP part, optional - when not provided it will be generated automatically)`' |
 | longlink | '`url`' |
 | linkPassword | '`password required to access the link(optional)`' |
