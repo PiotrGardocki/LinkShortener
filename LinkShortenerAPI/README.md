@@ -3,15 +3,19 @@
 ### Sending request to server
 Table of contents:
 - [Basics about requests](#basics-about-requests)
-- [Requests releted to users]
+- Requests releted to users
   - [Creating user](#creating-user)
   - [Logging user in](#logging-user-in)
   - [Logging user out](#logging-user-out)
   - [Deleting user](#deleting-user)
   - [Changing user's password](#changing-users-password)
   - [Changing user's email](#changing-users-email)
-- [Requests releted to shortlinks]
+- Requests releted to shortlinks
   - [Creating shortlink](#creating-shortlink)
+  - [Deleting shortlink](#deleting-shortlink)
+  - [Modify shortlink](#modify-shortlink)
+  - [Modify longlink](#modify-longlink)
+  - [Modify shortlink's password](#modify-shortlinks-password)
   - [Translation from shortlink to longlink](#translation-from-shortlink-to-longlink)
   - [Checking the status of shortlink](#checking-the-status-of-shortlink)
   - [Get user's links](#get-users-links)
@@ -131,6 +135,94 @@ Possible errors:
 - Status(401, 'Invalid token')
 - Status(408, 'Token expired')
 ---
+##### Creating shortlink:
+Request:
+
+| POST variable | variable value |
+| --- | --- |
+| action | 'anonCreateLink' |
+| shortlink | '`shortlink(optional, when not provided it will be generated automatically)`' |
+| longlink | '`url`' |
+| linkPassword | '`password required to access the link(optional)`' |
+| token | '`user's token(optional, when not provided shortlink will be anonymous and will expire after 7 days)`' |
+
+Response:
+- Status(201, 'Shortlink successfully added')
+- Body('shortlink: `shortlink(provided or generated)`')
+
+Possible errors:
+- Status(400, 'Shortlink(`shortlink`) is already taken')
+- Status(401, 'Invalid token')
+- Status(408, 'Token expired')
+---
+##### Deleting shortlink:
+Request:
+
+| POST variable | variable value |
+| --- | --- |
+| action | 'deleteShortlink' |
+| token | '`token returned by logging in`' |
+| shortlink | '`shortlink`' |
+
+Response:
+- Status(200, 'Shortlink succesfully deleted')
+
+Possible errors:
+- Status(401, 'Invalid token')
+- Status(408, 'Token expired')
+---
+##### Modify shortlink:
+Request:
+
+| POST variable | variable value |
+| --- | --- |
+| action | 'modifyShortlink' |
+| token | '`token returned by logging in`' |
+| shortlink | '`shortlink`' |
+| newShortlink | '`new shortlink`' |
+
+Response:
+- Status(200, 'Shortlink succesfully modified')
+
+Possible errors:
+- Status(400, 'Shortlink(`shortlink`) is already taken')
+- Status(401, 'Invalid token')
+- Status(408, 'Token expired')
+---
+##### Modify longlink:
+Request:
+
+| POST variable | variable value |
+| --- | --- |
+| action | 'modifyLonglink' |
+| token | '`token returned by logging in`' |
+| shortlink | '`shortlink`' |
+| newLonglink | '`new longlink`' |
+
+Response:
+- Status(200, 'Longlink succesfully modified')
+
+Possible errors:
+- Status(401, 'Invalid token')
+- Status(408, 'Token expired')
+---
+##### Modify shortlink's password:
+Request:
+
+| POST variable | variable value |
+| --- | --- |
+| action | '' |
+| token | '`token returned by logging in`' |
+| shortlink | '`shortlink`' |
+| newPassword | '`new password`' |
+
+Response:
+- Status(200, 'Password succesfully modified')
+
+Possible errors:
+- Status(401, 'Invalid token')
+- Status(408, 'Token expired')
+---
 ##### Translation from shortlink to longlink:
 
 Request:
@@ -165,23 +257,6 @@ Response:
 
 If shortlink does not exist, all values will be set to 0/None
 
----
-##### Creating shortlink:
-Request:
-
-| POST variable | variable value |
-| --- | --- |
-| action | 'anonCreateLink' |
-| shortlink | '`shortlink(optional, when not provided it will be generated automatically)`' |
-| longlink | '`url`' |
-| linkPassword | '`password required to access the link(optional)`' |
-
-Response:
-- Status(201, 'Shortlink successfully added')
-- Body('shortlink: `shortlink(provided or generated)`')
-
-Possible errors:
-- Status(400, 'Shortlink(`shortlink`) is already taken')
 ---
 ##### Get user's links:
 Request:
