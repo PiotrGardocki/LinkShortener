@@ -6,80 +6,48 @@ from shortener.appcode.core.db_errors import *
 class UsersActions:
     def __init__(self, users_interface):
         validate_type(users_interface, UsersInterface,
-                      'type of users_interface should be derived from UsersInterface')
-        self.db_interface = users_interface
+                      'Type of users_interface should be derived from UsersInterface')
+        self.users_interface = users_interface
 
     def create_user(self, email, password):
+        validate_type(email, str, 'Type of email must be str')
+        validate_type(password, str, 'Type of password must be str')
+
         try:
-            self.db_interface.create_user(email, password)
+            self.users_interface.create_user(email, password)
         except EmailAlreadyTaken as error:
             raise error
-        except BaseDBError as error:
-            # TODO add some log saving
-            raise BaseDBError("Other application error occurred")
-        except BaseException as error:
-            # TODO add some log saving
-            raise BaseException("Other Python error occurred")
 
     def log_user_in(self, email, password):
+        validate_type(email, str, 'Type of email must be str')
+        validate_type(password, str, 'Type of password must be str')
+
         try:
-            return self.db_interface.log_user_in(email, password)
+            return self.users_interface.log_user_in(email, password)
         except (UserNotExists, WrongPassword) as error:
             raise error
-        except BaseDBError as error:
-            # TODO add some log saving
-            raise BaseDBError("Other application error occurred")
-        except BaseException as error:
-            # TODO add some log saving
-            raise BaseException("Other Python error occurred")
 
     def log_user_out(self, token):
+        validate_type(token, str, 'Type of token must be str')
+
         try:
-            self.db_interface.log_user_out(token)
-        except (InvalidToken, TokenExpired) as error:
+            self.users_interface.log_user_out(token)
+        except InvalidToken as error:
             raise error
-        except BaseDBError as error:
-            # TODO add some log saving
-            raise BaseDBError("Other application error occurred")
-        except BaseException as error:
-            # TODO add some log saving
-            raise BaseException("Other Python error occurred")
 
     def delete_user(self, token):
+        validate_type(token, str, 'Type of token must be str')
+
         try:
-            self.db_interface.delete_user(token)
+            self.users_interface.delete_user(token)
         except (InvalidToken, TokenExpired) as error:
             raise error
-        except BaseDBError as error:
-            # TODO add some log saving
-            raise BaseDBError("Other application error occurred")
-        except BaseException as error:
-            # TODO add some log saving
-            raise BaseException("Other Python error occurred")
 
     def change_user_password(self, token, new_password):
+        validate_type(token, str, 'Type of token must be str')
+        validate_type(new_password, str, 'Type of new_password must be str')
+
         try:
-            self.db_interface.delete_email(token, new_password)
+            self.users_interface.change_user_password(token, new_password)
         except (InvalidToken, TokenExpired) as error:
             raise error
-        except BaseDBError as error:
-            # TODO add some log saving
-            raise BaseDBError("Other application error occurred")
-        except BaseException as error:
-            # TODO add some log saving
-            raise BaseException("Other Python error occurred")
-
-    def change_user_email(self, token, new_email):
-        try:
-            self.db_interface.delete_email(token, new_email)
-        except (InvalidToken, TokenExpired, EmailAlreadyTaken) as error:
-            raise error
-        except BaseDBError as error:
-            # TODO add some log saving
-            raise BaseDBError("Other application error occurred")
-        except BaseException as error:
-            # TODO add some log saving
-            raise BaseException("Other Python error occurred")
-
-    # def get_user_shotlinks_table(self, email, password):
-    #     pass
