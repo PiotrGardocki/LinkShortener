@@ -57,7 +57,7 @@ Request:
 
 | POST variable | variable value |
 | --- | --- |
-| action | 'loginUserIn' |
+| action | 'logUserIn' |
 | email | '`user's email`' |
 | password | '`user's password`' |
 
@@ -74,7 +74,7 @@ Request:
 
 | POST variable | variable value |
 | --- | --- |
-| action | 'loginUserOut' |
+| action | 'logUserOut' |
 | token | '`token returned by logging in`' |
 
 Response:
