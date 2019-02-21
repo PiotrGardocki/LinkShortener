@@ -148,7 +148,7 @@ Request:
 
 Response:
 - Status(201, 'Shortlink successfully added')
-- Body('shortlink: `shortlink(provided or generated)`')
+- Body('`shortlink(provided or generated)`')
 
 Possible errors:
 - Status(400, 'Shortlink(`shortlink`) is already taken')
@@ -239,7 +239,7 @@ Request:
 
 Response:
 - Status(200, 'Successful translation to longlink')
-- Body('longlink: `url`')
+- Body('`longlink`')
 
 Possible errors:
 - Status(401, 'Incorrect password for shortlink')
@@ -272,7 +272,7 @@ Request:
 
 Response:
 - Status(200, 'Links returned')
-- Body('{[{"shortlink": "`shortlink`", "longlink": "`longlink`", "password": "`password`"}, {}, ...]}')
+- Body('[{"shortlink": "`shortlink`", "longlink": "`longlink`", "password": "`password`"}, {}, ...]')
 
 Possible errors:
 - Status(401, 'Invalid token')
