@@ -63,7 +63,7 @@ Request:
 
 Response:
 - Status(200, 'User succesfully logged in')
-- Body('token: `token that will be used to authenticate user's actions`')
+- Body('`token that will be used to authenticate user's actions`')
 
 Possible errors:
 - Status(401, 'Incorrect password for user')

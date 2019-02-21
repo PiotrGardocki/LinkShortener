@@ -121,7 +121,7 @@ class DjangoRequestReceiver:
 
         try:
             token = users_interface.log_user_in(email, password)
-            return HttpResponse(status=200, reason='User succesfully logged in', content='token: ' + token)
+            return HttpResponse(status=200, reason='User succesfully logged in', content=token)
         except WrongPassword:
             return HttpResponse(status=401, reason='Incorrect password for user')
         except UserNotExists:
