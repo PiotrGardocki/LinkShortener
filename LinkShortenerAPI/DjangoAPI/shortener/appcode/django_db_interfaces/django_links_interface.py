@@ -49,7 +49,7 @@ class AccessToDjangoLinksDB(LinksInterface):
                 shortlink = AccessToDjangoLinksDB.generate_random_shortlink()
                 expire_date = AccessToDjangoLinksDB.get_default_expire_date()
                 LinksDB.objects.create(shortlink=shortlink, longlink=longlink,
-                                       password=password, expire_date=expire_date)
+                                       password=password, expiration_date=expire_date)
                 shortlink_creation_succesful = True
             except IntegrityError:
                 shortlink_creation_succesful = False

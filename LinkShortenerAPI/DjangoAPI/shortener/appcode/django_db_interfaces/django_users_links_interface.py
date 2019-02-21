@@ -60,7 +60,7 @@ class AccessToDjangoUsersLinksDB(UsersLinksInterface):
             old_user.linksdb_set.all().update(user=new_user)
             users_interface.delete_user_by_usersdb_instance(old_user)
 
-    def get_user_shotlinks_table(self, user_token):
+    def get_user_shortlinks_table(self, user_token):
         user = self.get_user_for_token(user_token)
         shortlinks_table = ShortlinksTable()
 

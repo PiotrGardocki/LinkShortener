@@ -92,7 +92,7 @@ class DjangoRequestReceiver:
             #     return DjangoRequestReceiver.handle_action_(request)
         except MissedParameters as error:
             return error.response
-        except BaseException:
+        except BaseException as error:
             return HttpResponse(status=500, reason='Internal Server Error')  # TODO add log saving
 
         return HttpResponse(status=405, reason="Action '%s' is not supported" % action)
@@ -191,9 +191,9 @@ class DjangoRequestReceiver:
 
     @staticmethod
     def handle_action_create_link(request):
-        check_request_for_missed_parameters(request, 'longlink')
-        shortlink = request.POST.get('shortlink', '')
-        longlink = request.POST['longlink']
+        check_request_for_missed_parameters(request, 'longLink')
+        shortlink = request.POST.get('shortLink', '')
+        longlink = request.POST['longLink']
         link_password = request.POST.get('linkPassword', '')
         token = request.POST.get('token', '')
 
@@ -204,9 +204,9 @@ class DjangoRequestReceiver:
 
     @staticmethod
     def handle_action_delete_link(request):
-        check_request_for_missed_parameters(request, 'token', 'shortlink')
+        check_request_for_missed_parameters(request, 'token', 'shortLink')
         token = request.POST['token']
-        shortlink = request.POST['shortlink']
+        shortlink = request.POST['shortLink']
 
         users_links_interface = DjangoRequestReceiver.get_users_links_interface()
 
@@ -222,10 +222,10 @@ class DjangoRequestReceiver:
 
     @staticmethod
     def handle_action_modify_shortlink(request):
-        check_request_for_missed_parameters(request, 'token', 'shortlink', 'newShortlink')
+        check_request_for_missed_parameters(request, 'token', 'shortLink', 'newShortLink')
         token = request.POST['token']
-        shortlink = request.POST['shortlink']
-        new_shortlink = request.POST['newShortlink']
+        shortlink = request.POST['shortLink']
+        new_shortlink = request.POST['newShortLink']
 
         users_links_interface = DjangoRequestReceiver.get_users_links_interface()
 
@@ -243,10 +243,10 @@ class DjangoRequestReceiver:
 
     @staticmethod
     def handle_action_modify_longlink(request):
-        check_request_for_missed_parameters(request, 'token', 'shortlink', 'newLonglink')
+        check_request_for_missed_parameters(request, 'token', 'shortLink', 'newLongLink')
         token = request.POST['token']
-        shortlink = request.POST['shortlink']
-        new_longlink = request.POST['newLonglink']
+        shortlink = request.POST['shortLink']
+        new_longlink = request.POST['newLongLink']
 
         users_links_interface = DjangoRequestReceiver.get_users_links_interface()
 
@@ -262,9 +262,9 @@ class DjangoRequestReceiver:
 
     @staticmethod
     def handle_action_modify_shortlink_password(request):
-        check_request_for_missed_parameters(request, 'token', 'shortlink', 'newPassword')
+        check_request_for_missed_parameters(request, 'token', 'shortLink', 'newPassword')
         token = request.POST['token']
-        shortlink = request.POST['shortlink']
+        shortlink = request.POST['shortLink']
         new_password = request.POST['newPassword']
 
         users_links_interface = DjangoRequestReceiver.get_users_links_interface()
@@ -281,15 +281,15 @@ class DjangoRequestReceiver:
 
     @staticmethod
     def handle_action_translate(request):
-        check_request_for_missed_parameters(request, 'shortlink')
-        shorlink = request.POST['shortlink']
+        check_request_for_missed_parameters(request, 'shortLink')
+        shorlink = request.POST['shortLink']
         password = request.POST.get('linkPassword', '')
 
         links_interface = DjangoRequestReceiver.get_links_interface()
 
         try:
             longlink = links_interface.get_longlink_from_shortlink(shorlink, password)
-            return HttpResponse(content='longlink: %s' % longlink, status=200,
+            return HttpResponse(content=longlink, status=200,
                                 reason='Successful translation to longlink')
         except IncorrectPasswordForShortLink:
             return HttpResponse(status=401, reason='Incorrect password for shortlink')
@@ -298,8 +298,8 @@ class DjangoRequestReceiver:
 
     @staticmethod
     def handle_action_check_link(request):
-        check_request_for_missed_parameters(request, 'shortlink')
-        shorlink = request.POST['shortlink']
+        check_request_for_missed_parameters(request, 'shortLink')
+        shorlink = request.POST['shortLink']
 
         links_interface = DjangoRequestReceiver.get_links_interface()
 
@@ -319,8 +319,9 @@ class DjangoRequestReceiver:
         users_links_interface = DjangoRequestReceiver.get_users_links_interface()
 
         try:
-            shortlinks_table = users_links_interface.get_user_shotlinks_table(token)
-            return HttpResponse(content=str(shortlinks_table), status=200, reason='Links returned')
+            shortlinks_table = users_links_interface.get_user_shortlinks_table(token)
+            return HttpResponse(content=str(shortlinks_table), status=200,
+                                reason='Links returned', content_type='application/json')
         except InvalidToken:
             return HttpResponse(status=401, reason='Invalid token')
         except TokenExpired:
@@ -335,7 +336,7 @@ class DjangoRequestReceiver:
         links_interface = DjangoRequestReceiver.get_links_interface()
 
         shortlink = links_interface.add_anonymous_shortlink(longlink, link_password)
-        return HttpResponse(content='shortlink: '+shortlink, status=201, reason='Shortlink succesfully added')
+        return HttpResponse(content=shortlink, status=201, reason='Shortlink succesfully added')
 
     @staticmethod
     def create_link_for_user(shortlink, longlink, link_password, user_token):
@@ -346,7 +347,7 @@ class DjangoRequestReceiver:
                 shortlink = users_links_interface.add_random_link(user_token, longlink, link_password)
             else:
                 users_links_interface.add_link(user_token, shortlink, longlink, link_password)
-            return HttpResponse(content='shortlink: ' + shortlink, status=201, reason='Shortlink succesfully added')
+            return HttpResponse(content=shortlink, status=201, reason='Shortlink succesfully added')
         except ShortLinkAlreadyTaken:
             return HttpResponse(status=400, reason='Shortlink(%s) is already taken' % shortlink)
         except InvalidToken:

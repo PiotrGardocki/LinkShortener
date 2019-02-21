@@ -5,7 +5,7 @@ class Shortlink:
         self.password = password
 
     def __str__(self):
-        return '{"shortlink": "%s","longlink": "%s","password": "%s"}' % (self.shortlink, self.longlink, self.password)
+        return '{"shortLink": "%s","longLink": "%s","password": "%s"}' % (self.shortlink, self.longlink, self.password)
 
 
 class ShortlinksTable:
@@ -19,7 +19,7 @@ class ShortlinksTable:
         return len(self.table_of_shortlinks)
 
     def __str__(self):
-        string = '{['
+        string = '['
 
         links = []
         for link in self.table_of_shortlinks:
@@ -27,5 +27,5 @@ class ShortlinksTable:
 
         string += ','.join(links)
 
-        string += ']}'
+        string += ']'
         return string

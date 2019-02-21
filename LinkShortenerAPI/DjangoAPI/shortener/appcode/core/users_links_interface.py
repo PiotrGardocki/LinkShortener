@@ -20,5 +20,5 @@ class UsersLinksInterface:
     def change_user_email(self, user_token, new_email):
         pass
 
-    def get_user_shotlinks_table(self, user_token):
+    def get_user_shortlinks_table(self, user_token):
         pass

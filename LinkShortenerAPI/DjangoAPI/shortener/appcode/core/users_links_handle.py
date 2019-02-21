@@ -79,7 +79,7 @@ class UsersLinksActions:
         except (InvalidToken, TokenExpired, EmailAlreadyTaken) as error:
             raise error
 
-    def get_user_shotlinks_table(self, user_token):
+    def get_user_shortlinks_table(self, user_token):
         validate_type(user_token, str, 'Type of user_token must be str')
 
         try:
