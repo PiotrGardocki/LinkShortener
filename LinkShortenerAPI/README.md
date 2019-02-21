@@ -141,8 +141,8 @@ Request:
 | POST variable | variable value |
 | --- | --- |
 | action | 'createShortlink' |
-| shortlink | '`shortlink(without domain/IP part, optional - when not provided it will be generated automatically)`' |
-| longlink | '`url`' |
+| shortLink | '`shortlink(without domain/IP part, optional - when not provided it will be generated automatically)`' |
+| longLink | '`url`' |
 | linkPassword | '`password required to access the link(optional)`' |
 | token | '`user's token(optional - when not provided shortlink will be anonymous and will expire after 7 days)`' |
 
@@ -162,7 +162,7 @@ Request:
 | --- | --- |
 | action | 'deleteShortlink' |
 | token | '`token returned by logging in`' |
-| shortlink | '`shortlink(without domain/IP part)`' |
+| shortLink | '`shortlink(without domain/IP part)`' |
 
 Response:
 - Status(200, 'Shortlink succesfully deleted')
@@ -179,8 +179,8 @@ Request:
 | --- | --- |
 | action | 'modifyShortlink' |
 | token | '`token returned by logging in`' |
-| shortlink | '`shortlink(without domain/IP part)`' |
-| newShortlink | '`new shortlink(without domain/IP part)`' |
+| shortLink | '`shortlink(without domain/IP part)`' |
+| newShortLink | '`new shortlink(without domain/IP part)`' |
 
 Response:
 - Status(200, 'Shortlink succesfully modified')
@@ -198,8 +198,8 @@ Request:
 | --- | --- |
 | action | 'modifyLonglink' |
 | token | '`token returned by logging in`' |
-| shortlink | '`shortlink(without domain/IP part)`' |
-| newLonglink | '`new longlink`' |
+| shortLink | '`shortlink(without domain/IP part)`' |
+| newLongLink | '`new longlink`' |
 
 Response:
 - Status(200, 'Longlink succesfully modified')
@@ -216,7 +216,7 @@ Request:
 | --- | --- |
 | action | 'modifyPassword' |
 | token | '`token returned by logging in`' |
-| shortlink | '`shortlink(without domain/IP part)`' |
+| shortLink | '`shortlink(without domain/IP part)`' |
 | newPassword | '`new password`' |
 
 Response:
@@ -234,7 +234,7 @@ Request:
 | POST variable | variable value |
 | --- | --- |
 | action | 'translate' |
-| shortlink | '`shortlink(without domain/IP part)`' |
+| shortLink | '`shortlink(without domain/IP part)`' |
 | linkPassword | '`password required to access the link(optional)`' |
 
 Response:
@@ -251,7 +251,7 @@ Request:
 | POST variable | variable value |
 | --- | --- |
 | action | 'checkLink' |
-| shortlink | '`shortlink(without domain/IP part)`' |
+| shortLink | '`shortlink(without domain/IP part)`' |
 
 Response:
 - Status(200, 'Request done')
