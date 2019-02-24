@@ -137,8 +137,6 @@ Possible errors:
 - Status(408, 'Token expired')
 ---
 ##### Validating token:
-Note that this operation logs user out
-
 Request:
 
 | POST variable | variable value |
