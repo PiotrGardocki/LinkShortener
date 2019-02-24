@@ -10,6 +10,7 @@ Table of contents:
   - [Deleting user](#deleting-user)
   - [Changing user's password](#changing-users-password)
   - [Changing user's email](#changing-users-email)
+  - [Validating token](#validating-token)
 - Requests releted to shortlinks
   - [Creating shortlink](#creating-shortlink)
   - [Deleting shortlink](#deleting-shortlink)
@@ -132,6 +133,23 @@ Response:
 
 Possible errors:
 - Status(400, 'Email(`newEmail`) is already taken')
+- Status(401, 'Invalid token')
+- Status(408, 'Token expired')
+---
+##### Validating token:
+Note that this operation logs user out
+
+Request:
+
+| POST variable | variable value |
+| --- | --- |
+| action | 'validateToken' |
+| token | '`token returned by logging in`' |
+
+Response:
+- Status(200, 'Token is valid')
+
+Possible errors:
 - Status(401, 'Invalid token')
 - Status(408, 'Token expired')
 ---
