@@ -38,3 +38,9 @@ class InvalidToken(BaseDBError): pass
 
 
 class TokenExpired(BaseDBError): pass
+
+
+# validation errors
+
+
+class ValidationError(BaseDBError): pass
