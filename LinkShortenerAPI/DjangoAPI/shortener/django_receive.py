@@ -110,6 +110,8 @@ class DjangoRequestReceiver:
             return HttpResponse(status=201, reason='User succesfully created')
         except EmailAlreadyTaken:
             return HttpResponse(status=400, reason='Email(%s) is already taken' % email)
+        except ValidationError:
+            return HttpResponse(status=400, reason='password does not meet requirements')
 
     @staticmethod
     def handle_action_log_user_in(request):
@@ -166,6 +168,8 @@ class DjangoRequestReceiver:
         try:
             users_interface.change_user_password(token, new_password)
             return HttpResponse(status=200, reason='Password succesfully changed')
+        except ValidationError:
+            return HttpResponse(status=400, reason='password does not meet requirements')
         except InvalidToken:
             return HttpResponse(status=401, reason='Invalid token')
         except TokenExpired:
@@ -197,10 +201,13 @@ class DjangoRequestReceiver:
         link_password = request.POST.get('linkPassword', '')
         token = request.POST.get('token', '')
 
-        if token == '':
-            return DjangoRequestReceiver.create_anonymous_link(shortlink, longlink, link_password)
-        else:
-            return DjangoRequestReceiver.create_link_for_user(shortlink, longlink, link_password, token)
+        try:
+            if token == '':
+                return DjangoRequestReceiver.create_anonymous_link(longlink, link_password)
+            else:
+                return DjangoRequestReceiver.create_link_for_user(shortlink, longlink, link_password, token)
+        except ValidationError:
+            return HttpResponse(status=400, reason='shortlink, longlink or password does not meet requirements')
 
     @staticmethod
     def handle_action_delete_link(request):
@@ -232,6 +239,8 @@ class DjangoRequestReceiver:
         try:
             users_links_interface.modify_shortlink(token, shortlink, new_shortlink)
             return HttpResponse(status=200, reason='Shortlink succesfully modified')
+        except ValidationError:
+            return HttpResponse(status=400, reason='shortlink does not meet requirements')
         except ShortLinkAlreadyTaken:
             return HttpResponse(status=400, reason='Shortlink(%s) is already taken' % new_shortlink)
         except InvalidToken:
@@ -253,6 +262,8 @@ class DjangoRequestReceiver:
         try:
             users_links_interface.modify_longlink(token, shortlink, new_longlink)
             return HttpResponse(status=200, reason='Longlink succesfully modified')
+        except ValidationError:
+            return HttpResponse(status=400, reason='longlink does not meet requirements')
         except InvalidToken:
             return HttpResponse(status=401, reason='Invalid token')
         except ShortLinkNotExists:
@@ -272,6 +283,8 @@ class DjangoRequestReceiver:
         try:
             users_links_interface.modify_password(token, shortlink, new_password)
             return HttpResponse(status=200, reason='Password succesfully modified')
+        except ValidationError:
+            return HttpResponse(status=400, reason='password does not meet requirements')
         except InvalidToken:
             return HttpResponse(status=401, reason='Invalid token')
         except ShortLinkNotExists:
@@ -332,7 +345,7 @@ class DjangoRequestReceiver:
     #     pass
 
     @staticmethod
-    def create_anonymous_link(shortlink, longlink, link_password):
+    def create_anonymous_link(longlink, link_password):
         links_interface = DjangoRequestReceiver.get_links_interface()
 
         shortlink = links_interface.add_anonymous_shortlink(longlink, link_password)
