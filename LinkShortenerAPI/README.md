@@ -32,11 +32,26 @@ All requests needs to send POST variable 'action', which inform server what type
 
 Possible errors in all actions:
 - Status(400, 'Request must be send by POST method')
+- Status(400, '`shortlink, longlink, or password` does not meet requirements')
 - Status(405, 'Action `action name` is not supported')
 - Status(406, 'Not given 'action' parameter')
 - Status(406, 'Not given required parameters for this action: `list of parameters separated with semicolon`')
 - Status(500, 'Internal Server Error')
 - ...or other HTTP Server errors...
+
+Requirements for some values:
+- shortLink:
+  - length in range [4, 40]
+  - allowed characters: small and big letters (english), digits
+- longLink:
+  - length in range [1, 400]
+  - allowed characters: small and big letters (english), digits and all of: /:?=&_@#.
+- user's password:
+  - length in range [5, 30]
+  - allowed characters: small and big letters (english), digits, underscores
+- link's password:
+  - length in range [0, 30]
+  - allowed characters: small and big letters (english), digits, underscores
 ---
 ##### Creating user:
 Request:
