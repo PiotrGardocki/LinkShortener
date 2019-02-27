@@ -1,5 +1,6 @@
 from shortener.appcode.core.users_interface import UsersInterface
 from shortener.appcode.core.type_valid import validate_type
+from shortener.appcode.core.data_validators import validate_user_password
 from shortener.appcode.core.db_errors import *
 
 
@@ -11,7 +12,9 @@ class UsersActions:
 
     def create_user(self, email, password):
         validate_type(email, str, 'Type of email must be str')
-        validate_type(password, str, 'Type of password must be str')
+        validate_user_password(password)
+
+        email = email.strip()
 
         try:
             self.users_interface.create_user(email, password)
@@ -21,6 +24,8 @@ class UsersActions:
     def log_user_in(self, email, password):
         validate_type(email, str, 'Type of email must be str')
         validate_type(password, str, 'Type of password must be str')
+
+        email = email.strip()
 
         try:
             return self.users_interface.log_user_in(email, password)
@@ -45,7 +50,7 @@ class UsersActions:
 
     def change_user_password(self, token, new_password):
         validate_type(token, str, 'Type of token must be str')
-        validate_type(new_password, str, 'Type of new_password must be str')
+        validate_user_password(new_password)
 
         try:
             self.users_interface.change_user_password(token, new_password)

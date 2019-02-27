@@ -1,5 +1,6 @@
 from shortener.appcode.core.users_links_interface import UsersLinksInterface
 from shortener.appcode.core.type_valid import validate_type
+from shortener.appcode.core.data_validators import validate_shortlink, validate_longlink, validate_link_password
 from shortener.appcode.core.db_errors import *
 
 
@@ -11,9 +12,9 @@ class UsersLinksActions:
 
     def add_link(self, user_token, shortlink, longlink, password=''):
         validate_type(user_token, str, 'Type of user_token must be str')
-        validate_type(shortlink, str, 'Type of shortlink must be str')
-        validate_type(longlink, str, 'Type of longlink must be str')
-        validate_type(password, str, 'Type of password must be str')
+        validate_shortlink(shortlink)
+        validate_longlink(longlink)
+        validate_link_password(password)
 
         try:
             self.users_links_interface.add_link(user_token, shortlink, longlink, password)
@@ -22,8 +23,8 @@ class UsersLinksActions:
 
     def add_random_link(self, user_token, longlink, password=''):
         validate_type(user_token, str, 'Type of user_token must be str')
-        validate_type(longlink, str, 'Type of longlink must be str')
-        validate_type(password, str, 'Type of password must be str')
+        validate_longlink(longlink)
+        validate_link_password(password)
 
         try:
             shortlink = self.users_links_interface.add_random_link(user_token, longlink, password)
@@ -43,7 +44,7 @@ class UsersLinksActions:
     def modify_shortlink(self, user_token, old_shortlink, new_shortlink):
         validate_type(user_token, str, 'Type of user_token must be str')
         validate_type(old_shortlink, str, 'Type of old_shortlink must be str')
-        validate_type(new_shortlink, str, 'Type of new_shortlink must be str')
+        validate_shortlink(new_shortlink)
 
         try:
             self.users_links_interface.modify_shortlink(user_token, old_shortlink, new_shortlink)
@@ -53,7 +54,7 @@ class UsersLinksActions:
     def modify_longlink(self, user_token, shortlink, new_longlink):
         validate_type(user_token, str, 'Type of user_token must be str')
         validate_type(shortlink, str, 'Type of shortlink must be str')
-        validate_type(new_longlink, str, 'Type of new_longlik must be str')
+        validate_longlink(new_longlink)
 
         try:
             self.users_links_interface.modify_longlink(user_token, shortlink, new_longlink)
@@ -63,7 +64,7 @@ class UsersLinksActions:
     def modify_password(self, user_token, shortlink, new_password):
         validate_type(user_token, str, 'Type of user_token must be str')
         validate_type(shortlink, str, 'Type of shortlink must be str')
-        validate_type(new_password, str, 'Type of new_password must be str')
+        validate_link_password(new_password)
 
         try:
             self.users_links_interface.modify_password(user_token, shortlink, new_password)
@@ -73,6 +74,8 @@ class UsersLinksActions:
     def change_user_email(self, user_token, new_email):
         validate_type(user_token, str, 'Type of user_token must be str')
         validate_type(new_email, str, 'Type of new_email must be str')
+
+        new_email = new_email.strip()
 
         try:
             self.users_links_interface.change_user_email(user_token, new_email)
