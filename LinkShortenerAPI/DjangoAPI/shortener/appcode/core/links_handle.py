@@ -11,8 +11,8 @@ class LinksActions:
         self.links_interface = links_interface
 
     def get_longlink_from_shortlink(self, shortlink, password=''):
-        validate_type(shortlink, "Type of shortlink must be str")
-        validate_type(password, "Type of password must be str")
+        validate_type(shortlink, str, "Type of shortlink must be str")
+        validate_type(password, str, "Type of password must be str")
 
         try:
             longlink = self.links_interface.get_longlink_from_shortlink(shortlink, password)
@@ -21,7 +21,7 @@ class LinksActions:
             raise error
 
     def get_shortlink_data(self, shortlink):
-        validate_type(shortlink, "Type of shortlink must be str")
+        validate_type(shortlink, str, "Type of shortlink must be str")
 
         data = self.links_interface.get_shortlink_data(shortlink)
         return data
@@ -30,4 +30,4 @@ class LinksActions:
         validate_longlink(longlink)
         validate_link_password(password)
 
-        self.links_interface.add_anonymous_shortlink(longlink, password)
+        return self.links_interface.add_anonymous_shortlink(longlink, password)
