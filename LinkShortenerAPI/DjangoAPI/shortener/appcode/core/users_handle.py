@@ -56,3 +56,11 @@ class UsersActions:
             self.users_interface.change_user_password(token, new_password)
         except (InvalidToken, TokenExpired) as error:
             raise error
+
+    def validate_token(self, token):
+        validate_type(token, str, 'Type of token must be str')
+
+        try:
+            self.users_interface.validate_token(token)
+        except (InvalidToken, TokenExpired) as error:
+            raise error

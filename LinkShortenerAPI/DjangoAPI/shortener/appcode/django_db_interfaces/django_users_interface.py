@@ -75,6 +75,9 @@ class AccessToDjangoUsersDB(UsersInterface):
         except ObjectDoesNotExist:
             raise InvalidToken("Given token is invalid")
 
+    def validate_token(self, token):
+        self.get_user_for_token(token)
+
     @staticmethod
     def generate_token_for_user():
         letters = list('abcdefghijklmnopqrstuvwxyz0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ')

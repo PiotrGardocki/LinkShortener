@@ -72,6 +72,8 @@ class DjangoRequestReceiver:
                 return DjangoRequestReceiver.handle_action_change_user_password(request)
             if action == 'changeuseremail':
                 return DjangoRequestReceiver.handle_action_change_user_email(request)
+            if action == 'validatetoken':
+                return DjangoRequestReceiver.handle_action_validate_token(request)
             if action == 'createshortlink':
                 return DjangoRequestReceiver.handle_action_create_link(request)
             if action == 'deleteshortlink':
@@ -93,7 +95,7 @@ class DjangoRequestReceiver:
         except MissedParameters as error:
             return error.response
         except BaseException as error:
-            return HttpResponse(status=500, reason='Internal Server Error')  # TODO add log saving
+            return HttpResponse(status=500, reason='Internal Server Error(%s)' % error)  # TODO add log saving
 
         return HttpResponse(status=405, reason="Action '%s' is not supported" % action)
 
@@ -124,10 +126,8 @@ class DjangoRequestReceiver:
         try:
             token = users_interface.log_user_in(email, password)
             return HttpResponse(status=200, reason='User succesfully logged in', content=token)
-        except WrongPassword:
-            return HttpResponse(status=401, reason='Incorrect password for user')
-        except UserNotExists:
-            return HttpResponse(status=404, reason='User not found')
+        except (WrongPassword, UserNotExists):
+            return HttpResponse(status=401, reason='Incorrect user\'s data')
 
     @staticmethod
     def handle_action_log_user_out(request):
@@ -188,6 +188,21 @@ class DjangoRequestReceiver:
             return HttpResponse(status=200, reason='Email succesfully changed')
         except EmailAlreadyTaken:
             return HttpResponse(status=400, reason='Email(%s) is already taken' % new_email)
+        except InvalidToken:
+            return HttpResponse(status=401, reason='Invalid token')
+        except TokenExpired:
+            return HttpResponse(status=408, reason='Token expired')
+
+    @staticmethod
+    def handle_action_validate_token(request):
+        check_request_for_missed_parameters(request, 'token')
+        token = request.POST['token']
+
+        users_interface = DjangoRequestReceiver.get_users_interface()
+
+        try:
+            users_interface.validate_token(token)
+            return HttpResponse(status=200, reason='Token is valid')
         except InvalidToken:
             return HttpResponse(status=401, reason='Invalid token')
         except TokenExpired:

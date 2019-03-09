@@ -23,6 +23,9 @@ class UsersInterface:
     def get_user_for_token(self, token):
         pass
 
+    def validate_token(self, token):
+        pass
+
     @staticmethod
     def generate_token_for_user():
         pass
