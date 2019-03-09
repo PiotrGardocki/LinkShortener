@@ -82,8 +82,7 @@ Response:
 - Body('`token that will be used to authenticate user's actions`')
 
 Possible errors:
-- Status(401, 'Incorrect password for user')
-- Status(404, 'User not found')
+- Status(401, 'Incorrect user's data')
 ---
 ##### Logging user out:
 Request:
