@@ -1,10 +1,9 @@
 from shortener.appcode.django_db_interfaces.django_links_interface import AccessToDjangoLinksDB
 from shortener.appcode.django_db_interfaces.django_users_interface import AccessToDjangoUsersDB
-from shortener.appcode.django_db_interfaces.django_users_links_interface import AccessToDjangoUsersLinksDB
 
 from shortener.appcode.core.users_handle import UsersActions
 from shortener.appcode.core.links_handle import LinksActions
-from shortener.appcode.core.users_links_handle import UsersLinksActions
+
 from shortener.appcode.core.db_errors import *
 
 # from shortener.appcode.core.shortlink_data import ShortlinkData
@@ -35,18 +34,15 @@ def check_request_for_missed_parameters(request, *parameters):
         raise error
 
 
+def get_links_interface():
+    return LinksActions(AccessToDjangoLinksDB(), AccessToDjangoUsersDB())
+
+
+def get_users_interface():
+    return UsersActions(AccessToDjangoUsersDB())
+
+
 class DjangoRequestReceiver:
-    @staticmethod
-    def get_links_interface():
-        return LinksActions(AccessToDjangoLinksDB())
-
-    @staticmethod
-    def get_users_interface():
-        return UsersActions(AccessToDjangoUsersDB())
-
-    @staticmethod
-    def get_users_links_interface():
-        return UsersLinksActions(AccessToDjangoUsersLinksDB())
 
     @staticmethod
     def handle_request(request):
@@ -99,13 +95,15 @@ class DjangoRequestReceiver:
 
         return HttpResponse(status=405, reason="Action '%s' is not supported" % action)
 
+    # users' actions
+
     @staticmethod
     def handle_action_create_user(request):
         check_request_for_missed_parameters(request, 'email', 'password')
         email = request.POST['email']
         password = request.POST['password']
 
-        users_interface = DjangoRequestReceiver.get_users_interface()
+        users_interface = get_users_interface()
 
         try:
             users_interface.create_user(email, password)
@@ -121,12 +119,12 @@ class DjangoRequestReceiver:
         email = request.POST['email']
         password = request.POST['password']
 
-        users_interface = DjangoRequestReceiver.get_users_interface()
+        users_interface = get_users_interface()
 
         try:
             token = users_interface.log_user_in(email, password)
             return HttpResponse(status=200, reason='User succesfully logged in', content=token)
-        except (WrongPassword, UserNotExists):
+        except IncorrectUserData:
             return HttpResponse(status=401, reason='Incorrect user\'s data')
 
     @staticmethod
@@ -134,7 +132,7 @@ class DjangoRequestReceiver:
         check_request_for_missed_parameters(request, 'token')
         token = request.POST['token']
 
-        users_interface = DjangoRequestReceiver.get_users_interface()
+        users_interface = get_users_interface()
 
         try:
             users_interface.log_user_out(token)
@@ -147,7 +145,7 @@ class DjangoRequestReceiver:
         check_request_for_missed_parameters(request, 'token')
         token = request.POST['token']
 
-        users_interface = DjangoRequestReceiver.get_users_interface()
+        users_interface = get_users_interface()
 
         try:
             users_interface.delete_user(token)
@@ -163,7 +161,7 @@ class DjangoRequestReceiver:
         token = request.POST['token']
         new_password = request.POST['newPassword']
 
-        users_interface = DjangoRequestReceiver.get_users_interface()
+        users_interface = get_users_interface()
 
         try:
             users_interface.change_user_password(token, new_password)
@@ -181,10 +179,10 @@ class DjangoRequestReceiver:
         token = request.POST['token']
         new_email = request.POST['newEmail']
 
-        users_links_interface = DjangoRequestReceiver.get_users_links_interface()
+        users_interface = get_users_interface()
 
         try:
-            users_links_interface.change_user_email(token, new_email)
+            users_interface.change_user_email(token, new_email)
             return HttpResponse(status=200, reason='Email succesfully changed')
         except EmailAlreadyTaken:
             return HttpResponse(status=400, reason='Email(%s) is already taken' % new_email)
@@ -198,7 +196,7 @@ class DjangoRequestReceiver:
         check_request_for_missed_parameters(request, 'token')
         token = request.POST['token']
 
-        users_interface = DjangoRequestReceiver.get_users_interface()
+        users_interface = get_users_interface()
 
         try:
             users_interface.validate_token(token)
@@ -208,6 +206,8 @@ class DjangoRequestReceiver:
         except TokenExpired:
             return HttpResponse(status=408, reason='Token expired')
 
+    # links' actions
+
     @staticmethod
     def handle_action_create_link(request):
         check_request_for_missed_parameters(request, 'longLink')
@@ -216,13 +216,24 @@ class DjangoRequestReceiver:
         link_password = request.POST.get('linkPassword', '')
         token = request.POST.get('token', '')
 
+        if shortlink == '':
+            shortlink = None
+        if token == '':
+            token = None
+
+        links_interface = get_links_interface()
+
         try:
-            if token == '':
-                return DjangoRequestReceiver.create_anonymous_link(longlink, link_password)
-            else:
-                return DjangoRequestReceiver.create_link_for_user(shortlink, longlink, link_password, token)
+            shortlink = links_interface.add_link(longlink, link_password, shortlink, token)
+            return HttpResponse(content=shortlink, status=201, reason='Shortlink succesfully added')
         except ValidationError:
             return HttpResponse(status=400, reason='shortlink, longlink or password does not meet requirements')
+        except ShortLinkAlreadyTaken:
+            return HttpResponse(status=400, reason='Shortlink(%s) is already taken' % shortlink)
+        except InvalidToken:
+            return HttpResponse(status=401, reason='Invalid token')
+        except TokenExpired:
+            return HttpResponse(status=408, reason='Token expired')
 
     @staticmethod
     def handle_action_delete_link(request):
@@ -230,10 +241,10 @@ class DjangoRequestReceiver:
         token = request.POST['token']
         shortlink = request.POST['shortLink']
 
-        users_links_interface = DjangoRequestReceiver.get_users_links_interface()
+        links_interface = get_links_interface()
 
         try:
-            users_links_interface.delete_link(token, shortlink)
+            links_interface.delete_link(token, shortlink)
             return HttpResponse(status=200, reason='Shortlink succesfully deleted')
         except InvalidToken:
             return HttpResponse(status=401, reason='Invalid token')
@@ -249,10 +260,10 @@ class DjangoRequestReceiver:
         shortlink = request.POST['shortLink']
         new_shortlink = request.POST['newShortLink']
 
-        users_links_interface = DjangoRequestReceiver.get_users_links_interface()
+        links_interface = get_links_interface()
 
         try:
-            users_links_interface.modify_shortlink(token, shortlink, new_shortlink)
+            links_interface.modify_shortlink(token, shortlink, new_shortlink)
             return HttpResponse(status=200, reason='Shortlink succesfully modified')
         except ValidationError:
             return HttpResponse(status=400, reason='shortlink does not meet requirements')
@@ -272,10 +283,10 @@ class DjangoRequestReceiver:
         shortlink = request.POST['shortLink']
         new_longlink = request.POST['newLongLink']
 
-        users_links_interface = DjangoRequestReceiver.get_users_links_interface()
+        links_interface = get_links_interface()
 
         try:
-            users_links_interface.modify_longlink(token, shortlink, new_longlink)
+            links_interface.modify_longlink(token, shortlink, new_longlink)
             return HttpResponse(status=200, reason='Longlink succesfully modified')
         except ValidationError:
             return HttpResponse(status=400, reason='longlink does not meet requirements')
@@ -293,10 +304,10 @@ class DjangoRequestReceiver:
         shortlink = request.POST['shortLink']
         new_password = request.POST['newPassword']
 
-        users_links_interface = DjangoRequestReceiver.get_users_links_interface()
+        links_interface = get_links_interface()
 
         try:
-            users_links_interface.modify_password(token, shortlink, new_password)
+            links_interface.modify_link_password(token, shortlink, new_password)
             return HttpResponse(status=200, reason='Password succesfully modified')
         except ValidationError:
             return HttpResponse(status=400, reason='password does not meet requirements')
@@ -313,7 +324,7 @@ class DjangoRequestReceiver:
         shorlink = request.POST['shortLink']
         password = request.POST.get('linkPassword', '')
 
-        links_interface = DjangoRequestReceiver.get_links_interface()
+        links_interface = get_links_interface()
 
         try:
             longlink = links_interface.get_longlink_from_shortlink(shorlink, password)
@@ -329,7 +340,7 @@ class DjangoRequestReceiver:
         check_request_for_missed_parameters(request, 'shortLink')
         shorlink = request.POST['shortLink']
 
-        links_interface = DjangoRequestReceiver.get_links_interface()
+        links_interface = get_links_interface()
 
         shorlink_data = links_interface.get_shortlink_data(shorlink)
         content = 'exists: ' + bool_to_str(shorlink_data.exists()) + \
@@ -344,10 +355,10 @@ class DjangoRequestReceiver:
         check_request_for_missed_parameters(request, 'token')
         token = request.POST['token']
 
-        users_links_interface = DjangoRequestReceiver.get_users_links_interface()
+        links_interface = get_links_interface()
 
         try:
-            shortlinks_table = users_links_interface.get_user_shortlinks_table(token)
+            shortlinks_table = links_interface.get_user_shortlinks_table(token)
             return HttpResponse(content=str(shortlinks_table), status=200,
                                 reason='Links returned', content_type='application/json')
         except InvalidToken:
@@ -358,27 +369,3 @@ class DjangoRequestReceiver:
     # @staticmethod
     # def handle_action_(request):
     #     pass
-
-    @staticmethod
-    def create_anonymous_link(longlink, link_password):
-        links_interface = DjangoRequestReceiver.get_links_interface()
-
-        shortlink = links_interface.add_anonymous_shortlink(longlink, link_password)
-        return HttpResponse(content=shortlink, status=201, reason='Shortlink succesfully added')
-
-    @staticmethod
-    def create_link_for_user(shortlink, longlink, link_password, user_token):
-        users_links_interface = DjangoRequestReceiver.get_users_links_interface()
-
-        try:
-            if shortlink == '':
-                shortlink = users_links_interface.add_random_link(user_token, longlink, link_password)
-            else:
-                users_links_interface.add_link(user_token, shortlink, longlink, link_password)
-            return HttpResponse(content=shortlink, status=201, reason='Shortlink succesfully added')
-        except ShortLinkAlreadyTaken:
-            return HttpResponse(status=400, reason='Shortlink(%s) is already taken' % shortlink)
-        except InvalidToken:
-            return HttpResponse(status=401, reason='Invalid token')
-        except TokenExpired:
-            return HttpResponse(status=408, reason='Token expired')
