@@ -24,11 +24,7 @@ class ShortLinkAlreadyTaken(BaseDBError): pass
 
 # users errors
 
-
-class UserNotExists(BaseDBError): pass
-
-
-class WrongPassword(BaseDBError): pass
+class IncorrectUserData(BaseDBError): pass
 
 
 class EmailAlreadyTaken(BaseDBError): pass
