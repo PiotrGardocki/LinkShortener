@@ -1,4 +1,4 @@
-from shortener.appcode.core.type_valid import validate_type, validate_list_of_types
+from shortener.appcode.core.type_valid import validate_type
 import datetime
 
 
@@ -22,8 +22,7 @@ class ShortlinkData:
         self.does_exist = belongs_to_user
 
     def set_expiration_date(self, expiration_date):
-        validate_list_of_types(expiration_date, [datetime.date, None],
-                               'Type of expiration_date must be datetime.date or None')
+        validate_type(expiration_date, [datetime.date, None], 'Type of expiration_date must be datetime.date or None')
         self.expiration_date = expiration_date
 
     def exists(self):
