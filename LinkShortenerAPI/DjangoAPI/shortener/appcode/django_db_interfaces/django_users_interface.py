@@ -13,28 +13,16 @@ class AccessToDjangoUsersDB(UsersInterface):
     def create_user(self, email, password):
         self.create_and_get_usersdb_instance(email, password)
 
-    def delete_user(self, token):
-        user = self.get_user_for_token(token)
-        self.delete_user_by_usersdb_instance(user)
-
-    def change_user_password(self, token, new_password):
-        user = self.get_user_for_token(token)
-
-        user.password = new_password
-        user.save()
-        self.expire_token(token)
-
     def log_user_in(self, email, password):
         try:
             user = UsersDB.objects.get(email=email)
         except ObjectDoesNotExist:
-            raise UserNotExists("User(%s) does not exist" % email)
+            raise IncorrectUserData("Incorrect user's data")
 
         if user.password != password:
-            raise WrongPassword("Password(%s) is wrong" % password)
+            raise IncorrectUserData("Incorrect user's data")
 
         token_creation_succesful = False
-
         while not token_creation_succesful:
             try:
                 user.token = self.generate_token_for_user()
@@ -48,14 +36,6 @@ class AccessToDjangoUsersDB(UsersInterface):
         return user.token
 
     def log_user_out(self, token):
-        self.expire_token(token)
-
-    def extend_token(self, token):
-        user = self.get_user_for_token(token)
-        user.token_expiration = self.get_token_expiration_time()
-        user.save()
-
-    def expire_token(self, token):
         try:
             user = UsersDB.objects.get(token=token)
         except ObjectDoesNotExist:
@@ -65,18 +45,32 @@ class AccessToDjangoUsersDB(UsersInterface):
         user.token_expiration = None
         user.save()
 
-    def get_user_for_token(self, token):
-        try:
-            user = UsersDB.objects.get(token=token)
-            if user.token_expiration < datetime.datetime.today():
-                self.expire_token(token)
-                raise TokenExpired("Given token expired")
-            return user
-        except ObjectDoesNotExist:
-            raise InvalidToken("Given token is invalid")
+    def delete_user(self, token):
+        user = self.get_usersdb_instance_for_token(token)
+        self.delete_user_by_usersdb_instance(user)
+
+    def change_user_password(self, token, new_password):
+        user = self.get_usersdb_instance_for_token(token)
+
+        user.password = new_password
+        user.save()
+
+    def change_user_email(self, token, new_email):
+        old_user = self.get_usersdb_instance_for_token(token)
+        password = old_user.password
+
+        with transaction.atomic():
+            new_user = self.create_and_get_usersdb_instance(new_email, password)
+            old_user.linksdb_set.all().update(user=new_user)
+            self.delete_user_by_usersdb_instance(old_user)
 
     def validate_token(self, token):
-        self.get_user_for_token(token)
+        self.get_usersdb_instance_for_token(token)
+
+    def refresh_token(self, token):
+        user = self.get_usersdb_instance_for_token(token)
+        user.token_expiration = self.get_token_expiration_time()
+        user.save()
 
     @staticmethod
     def generate_token_for_user():
@@ -104,3 +98,13 @@ class AccessToDjangoUsersDB(UsersInterface):
 
         if num_of_deleted_users != 1:
             raise OtherDBError("User has not been deleted properly")
+
+    def get_usersdb_instance_for_token(self, token):
+        try:
+            user = UsersDB.objects.get(token=token)
+            if user.token_expiration < datetime.datetime.today():
+                self.log_user_out(token)
+                raise TokenExpired("Given token expired")
+            return user
+        except ObjectDoesNotExist:
+            raise InvalidToken("Given token is invalid")
