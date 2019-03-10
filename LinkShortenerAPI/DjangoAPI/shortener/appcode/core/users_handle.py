@@ -22,45 +22,44 @@ class UsersActions:
             raise error
 
     def log_user_in(self, email, password):
-        validate_type(email, str, 'Type of email must be str')
-        validate_type(password, str, 'Type of password must be str')
-
-        email = email.strip()
-
         try:
             return self.users_interface.log_user_in(email, password)
-        except (UserNotExists, WrongPassword) as error:
+        except IncorrectUserData as error:
             raise error
 
     def log_user_out(self, token):
-        validate_type(token, str, 'Type of token must be str')
-
         try:
             self.users_interface.log_user_out(token)
         except InvalidToken as error:
             raise error
 
     def delete_user(self, token):
-        validate_type(token, str, 'Type of token must be str')
-
         try:
             self.users_interface.delete_user(token)
         except (InvalidToken, TokenExpired) as error:
             raise error
 
     def change_user_password(self, token, new_password):
-        validate_type(token, str, 'Type of token must be str')
         validate_user_password(new_password)
 
         try:
             self.users_interface.change_user_password(token, new_password)
+            self.log_user_out(token)
         except (InvalidToken, TokenExpired) as error:
             raise error
 
-    def validate_token(self, token):
-        validate_type(token, str, 'Type of token must be str')
+    def change_user_email(self, token, new_email):
+        validate_type(new_email, str, 'Type of new_email must be str')
 
         try:
+            self.users_interface.change_user_email(token, new_email)
+            self.log_user_out(token)
+        except (EmailAlreadyTaken, InvalidToken, TokenExpired) as error:
+            raise error
+
+    def validate_token(self, token):
+        try:
             self.users_interface.validate_token(token)
+            self.users_interface.refresh_token(token)
         except (InvalidToken, TokenExpired) as error:
             raise error
