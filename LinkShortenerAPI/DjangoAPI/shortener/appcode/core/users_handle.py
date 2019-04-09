@@ -53,7 +53,10 @@ class UsersActions:
 
         try:
             self.users_interface.change_user_email(token, new_email)
-            self.log_user_out(token)
+            try:
+                self.log_user_out(token)
+            except InvalidToken:
+                pass
         except (EmailAlreadyTaken, InvalidToken) as error:
             raise error
 
