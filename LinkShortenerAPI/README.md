@@ -111,7 +111,6 @@ Response:
 
 Possible errors:
 - Status(401, 'Invalid token')
-- Status(408, 'Token expired')
 ---
 ##### Changing user's password:
 Note that this operation logs user out
@@ -129,7 +128,6 @@ Response:
 
 Possible errors:
 - Status(401, 'Invalid token')
-- Status(408, 'Token expired')
 ---
 ##### Changing user's email:
 Note that this operation logs user out
@@ -148,7 +146,6 @@ Response:
 Possible errors:
 - Status(400, 'Email(`newEmail`) is already taken')
 - Status(401, 'Invalid token')
-- Status(408, 'Token expired')
 ---
 ##### Validating token:
 Request:
@@ -159,11 +156,8 @@ Request:
 | token | '`token returned by logging in`' |
 
 Response:
-- Status(200, 'Token is valid')
-
-Possible errors:
-- Status(401, 'Invalid token')
-- Status(408, 'Token expired')
+- Status(200, 'Token is `valid or invalid`')
+- Body('`1 or 0`')
 ---
 ##### Creating shortlink:
 Request:
@@ -183,7 +177,6 @@ Response:
 Possible errors:
 - Status(400, 'Shortlink(`shortlink`) is already taken')
 - Status(401, 'Invalid token')
-- Status(408, 'Token expired')
 ---
 ##### Deleting shortlink:
 Request:
@@ -200,7 +193,6 @@ Response:
 Possible errors:
 - Status(401, 'Invalid token')
 - Status(404, 'Shortlink not found')
-- Status(408, 'Token expired')
 ---
 ##### Modify shortlink:
 Request:
@@ -219,7 +211,6 @@ Possible errors:
 - Status(400, 'Shortlink(`new shortlink`) is already taken')
 - Status(401, 'Invalid token')
 - Status(404, 'Shortlink not found')
-- Status(408, 'Token expired')
 ---
 ##### Modify longlink:
 Request:
@@ -237,7 +228,6 @@ Response:
 Possible errors:
 - Status(401, 'Invalid token')
 - Status(404, 'Shortlink not found')
-- Status(408, 'Token expired')
 ---
 ##### Modify shortlink's password:
 Request:
@@ -255,7 +245,6 @@ Response:
 Possible errors:
 - Status(401, 'Invalid token')
 - Status(404, 'Shortlink not found')
-- Status(408, 'Token expired')
 ---
 ##### Translation from shortlink to longlink:
 
@@ -306,4 +295,3 @@ Response:
 
 Possible errors:
 - Status(401, 'Invalid token')
-- Status(408, 'Token expired')

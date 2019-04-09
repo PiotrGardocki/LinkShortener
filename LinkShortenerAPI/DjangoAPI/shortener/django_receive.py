@@ -152,8 +152,6 @@ class DjangoRequestReceiver:
             return HttpResponse(status=200, reason='User succesfully deleted')
         except InvalidToken:
             return HttpResponse(status=401, reason='Invalid token')
-        except TokenExpired:
-            return HttpResponse(status=408, reason='Token expired')
 
     @staticmethod
     def handle_action_change_user_password(request):
@@ -170,8 +168,6 @@ class DjangoRequestReceiver:
             return HttpResponse(status=400, reason='password does not meet requirements')
         except InvalidToken:
             return HttpResponse(status=401, reason='Invalid token')
-        except TokenExpired:
-            return HttpResponse(status=408, reason='Token expired')
 
     @staticmethod
     def handle_action_change_user_email(request):
@@ -188,8 +184,6 @@ class DjangoRequestReceiver:
             return HttpResponse(status=400, reason='Email(%s) is already taken' % new_email)
         except InvalidToken:
             return HttpResponse(status=401, reason='Invalid token')
-        except TokenExpired:
-            return HttpResponse(status=408, reason='Token expired')
 
     @staticmethod
     def handle_action_validate_token(request):
@@ -198,13 +192,10 @@ class DjangoRequestReceiver:
 
         users_interface = get_users_interface()
 
-        try:
-            users_interface.validate_token(token)
-            return HttpResponse(status=200, reason='Token is valid')
-        except InvalidToken:
-            return HttpResponse(status=401, reason='Invalid token')
-        except TokenExpired:
-            return HttpResponse(status=408, reason='Token expired')
+        if users_interface.validate_token(token):
+            return HttpResponse(status=200, reason='Token is valid', content='1')
+        else:
+            return HttpResponse(status=200, reason='Token is invalid', content='0')
 
     # links' actions
 
@@ -232,8 +223,6 @@ class DjangoRequestReceiver:
             return HttpResponse(status=400, reason='Shortlink(%s) is already taken' % shortlink)
         except InvalidToken:
             return HttpResponse(status=401, reason='Invalid token')
-        except TokenExpired:
-            return HttpResponse(status=408, reason='Token expired')
 
     @staticmethod
     def handle_action_delete_link(request):
@@ -250,8 +239,6 @@ class DjangoRequestReceiver:
             return HttpResponse(status=401, reason='Invalid token')
         except ShortLinkNotExists:
             return HttpResponse(status=404, reason='Shortlink not found')
-        except TokenExpired:
-            return HttpResponse(status=408, reason='Token expired')
 
     @staticmethod
     def handle_action_modify_shortlink(request):
@@ -273,8 +260,6 @@ class DjangoRequestReceiver:
             return HttpResponse(status=401, reason='Invalid token')
         except ShortLinkNotExists:
             return HttpResponse(status=404, reason='Shortlink not found')
-        except TokenExpired:
-            return HttpResponse(status=408, reason='Token expired')
 
     @staticmethod
     def handle_action_modify_longlink(request):
@@ -294,8 +279,6 @@ class DjangoRequestReceiver:
             return HttpResponse(status=401, reason='Invalid token')
         except ShortLinkNotExists:
             return HttpResponse(status=404, reason='Shortlink not found')
-        except TokenExpired:
-            return HttpResponse(status=408, reason='Token expired')
 
     @staticmethod
     def handle_action_modify_shortlink_password(request):
@@ -315,8 +298,6 @@ class DjangoRequestReceiver:
             return HttpResponse(status=401, reason='Invalid token')
         except ShortLinkNotExists:
             return HttpResponse(status=404, reason='Shortlink not found')
-        except TokenExpired:
-            return HttpResponse(status=408, reason='Token expired')
 
     @staticmethod
     def handle_action_translate(request):
@@ -363,8 +344,6 @@ class DjangoRequestReceiver:
                                 reason='Links returned', content_type='application/json')
         except InvalidToken:
             return HttpResponse(status=401, reason='Invalid token')
-        except TokenExpired:
-            return HttpResponse(status=408, reason='Token expired')
 
     # @staticmethod
     # def handle_action_(request):

@@ -104,7 +104,7 @@ class AccessToDjangoUsersDB(UsersInterface):
             user = UsersDB.objects.get(token=token)
             if user.token_expiration < datetime.datetime.today():
                 self.log_user_out(token)
-                raise TokenExpired("Given token expired")
+                raise InvalidToken("Given token is invalid")
             return user
         except ObjectDoesNotExist:
             raise InvalidToken("Given token is invalid")

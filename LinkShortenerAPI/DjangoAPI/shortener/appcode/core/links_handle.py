@@ -33,14 +33,14 @@ class LinksActions:
             if user_token is not None:
                 self.users_interface.refresh_token(user_token)
             return shortlink
-        except (ShortLinkAlreadyTaken, InvalidToken, TokenExpired) as error:
+        except (ShortLinkAlreadyTaken, InvalidToken) as error:
             raise error
 
     def delete_link(self, user_token, shortlink):
         try:
             self.links_interface.delete_link(user_token, shortlink)
             self.users_interface.refresh_token(user_token)
-        except (InvalidToken, ShortLinkNotExists, TokenExpired) as error:
+        except (InvalidToken, ShortLinkNotExists) as error:
             raise error
 
     def modify_shortlink(self, user_token, old_shortlink, new_shortlink):
@@ -49,7 +49,7 @@ class LinksActions:
         try:
             self.links_interface.modify_shortlink(user_token, old_shortlink, new_shortlink)
             self.users_interface.refresh_token(user_token)
-        except (ShortLinkAlreadyTaken,  InvalidToken, ShortLinkNotExists, TokenExpired) as error:
+        except (ShortLinkAlreadyTaken,  InvalidToken, ShortLinkNotExists) as error:
             raise error
 
     def modify_longlink(self, user_token, shortlink, new_longlink):
@@ -58,7 +58,7 @@ class LinksActions:
         try:
             self.links_interface.modify_longlink(user_token, shortlink, new_longlink)
             self.users_interface.refresh_token(user_token)
-        except (InvalidToken, ShortLinkNotExists, TokenExpired) as error:
+        except (InvalidToken, ShortLinkNotExists) as error:
             raise error
 
     def modify_link_password(self, user_token, shortlink, new_password):
@@ -67,7 +67,7 @@ class LinksActions:
         try:
             self.links_interface.modify_link_password(user_token, shortlink, new_password)
             self.users_interface.refresh_token(user_token)
-        except (InvalidToken, ShortLinkNotExists, TokenExpired) as error:
+        except (InvalidToken, ShortLinkNotExists) as error:
             raise error
 
     def get_longlink_from_shortlink(self, shortlink, password=''):
@@ -86,7 +86,7 @@ class LinksActions:
             shortlinks_table = self.links_interface.get_user_shortlinks_table(user_token)
             self.users_interface.refresh_token(user_token)
             return shortlinks_table
-        except (InvalidToken, TokenExpired) as error:
+        except InvalidToken as error:
             raise error
 
     @staticmethod

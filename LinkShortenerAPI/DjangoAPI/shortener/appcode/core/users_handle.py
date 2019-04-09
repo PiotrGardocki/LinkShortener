@@ -36,7 +36,7 @@ class UsersActions:
     def delete_user(self, token):
         try:
             self.users_interface.delete_user(token)
-        except (InvalidToken, TokenExpired) as error:
+        except InvalidToken as error:
             raise error
 
     def change_user_password(self, token, new_password):
@@ -45,7 +45,7 @@ class UsersActions:
         try:
             self.users_interface.change_user_password(token, new_password)
             self.log_user_out(token)
-        except (InvalidToken, TokenExpired) as error:
+        except InvalidToken as error:
             raise error
 
     def change_user_email(self, token, new_email):
@@ -54,12 +54,13 @@ class UsersActions:
         try:
             self.users_interface.change_user_email(token, new_email)
             self.log_user_out(token)
-        except (EmailAlreadyTaken, InvalidToken, TokenExpired) as error:
+        except (EmailAlreadyTaken, InvalidToken) as error:
             raise error
 
     def validate_token(self, token):
         try:
             self.users_interface.validate_token(token)
             self.users_interface.refresh_token(token)
-        except (InvalidToken, TokenExpired) as error:
-            raise error
+            return True
+        except InvalidToken:
+            return False

@@ -33,9 +33,6 @@ class EmailAlreadyTaken(BaseDBError): pass
 class InvalidToken(BaseDBError): pass
 
 
-class TokenExpired(BaseDBError): pass
-
-
 # validation errors
 
 
